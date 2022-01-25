@@ -10,4 +10,7 @@ use Illuminate\Support\Facades\DB;
 class TreeLibController extends Controller
 {
 
+    public function test(){
+        return view("treelib::test");
+    }
 }

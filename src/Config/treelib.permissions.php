@@ -1,8 +1,8 @@
 <?php
 
 return [
-//    'cat' => [
-//        'label' => 'Ratting monitor',
-//        'description' => 'Be a cat and catch fat rats.',
-//    ],
+    'access_override' => [
+        'label' => 'Access Admin',
+        'description' => 'Can access restricted resources regardless of configured access controls.',
+    ],
 ];
