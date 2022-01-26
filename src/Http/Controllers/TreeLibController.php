@@ -11,6 +11,6 @@ class TreeLibController extends Controller
 {
 
     public function test(){
-        return view("treelib::test");
+        return view("treelib::test",["test"=>1]);
     }
 }

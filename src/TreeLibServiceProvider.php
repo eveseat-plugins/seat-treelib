@@ -2,9 +2,10 @@
 
 namespace RecursiveTree\Seat\TreeLib;
 
+use RecursiveTree\Seat\TreeLib\Http\Composers\EditAccessControlComposer;
 use Seat\Services\AbstractSeatPlugin;
 
-use  Seat\Eveapi\Jobs\Status\Status;
+use Illuminate\Support\Facades\View;
 
 class TreeLibServiceProvider extends AbstractSeatPlugin
 {
@@ -19,6 +20,8 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
         $this->publishes([
             __DIR__ . '/resources/js' => public_path('treelib/js')
         ]);
+
+        View::composer("treelib::editAccessControl",EditAccessControlComposer::class);
     }
 
     public function register(){

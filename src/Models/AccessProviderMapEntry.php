@@ -1,6 +1,6 @@
 <?php
 
-namespace RecursiveTree\Seat\Inventory\Models;
+namespace RecursiveTree\Seat\TreeLib\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use RecursiveTree\Seat\TreeLib\AccessControl\AccessControlHelper;
