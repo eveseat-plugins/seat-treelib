@@ -5,8 +5,8 @@ Route::group([
     'middleware' => ['web', 'auth'],
     'prefix' => 'treelib',
 ], function () {
-    Route::get('/test', [
-        'as'   => 'treelib.test',
-        'uses' => 'TreeLibController@test',
+    Route::post('/giveaway/enter', [
+        'as'   => 'treelib.enterGiveaway',
+        'uses' => 'TreeLibController@enterGiveAway',
     ]);
 });
