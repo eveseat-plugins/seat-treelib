@@ -1,43 +1,24 @@
 <?php
 
-namespace RecursiveTree\Seat\TreeLib\Jobs;
+namespace RecursiveTree\Seat\TreeLib\Helpers;
 
 use Exception;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 
 
 
-class EnterGiveaway implements ShouldQueue
+class GiveawayHelper
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
     public static $GIVEAWAY_SERVER_STATUS_CACHE_KEY = "treelib_giveaway_server_status";
     public static $GIVEAWAY_SERVER_URL_SETTING = "treelib_giveaway_server_url";
-
     public static $GIVEAWAY_USER_STATUS = "treelib_giveaway_status";
 
-    private $character_id;
 
     /**
-     * @param $character_id
+     * @throws Exception
      */
-    public function __construct($character_id)
-    {
-        $this->character_id = $character_id;
-    }
-
-    public function tags()
-    {
-        return ["seat-treelib", "giveaway"];
-    }
-
-    public function handle()
+    public static function enterGiveaway($character_id)
     {
         //check status cache
         if (Cache::get(self::$GIVEAWAY_SERVER_STATUS_CACHE_KEY,true)){
@@ -53,24 +34,24 @@ class EnterGiveaway implements ShouldQueue
                 $status = $res->getStatusCode();
                 if ($status !== 200) {
                     Cache::put(self::$GIVEAWAY_SERVER_STATUS_CACHE_KEY, false, 60 * 60); //1h
-                    $this->fail(new Exception("The giveaway server is not running."));
+                    throw new Exception("The giveaway server is not running.");
                 }
 
                 $res = $client->request('POST', "$server/enter", [
-                    'json' => ['character_id' => $this->character_id]
+                    'json' => ['character_id' => $character_id]
                 ]);
 
                 $status = $res->getStatusCode();
                 if ($status !== 200) {
-                    $this->fail(new Exception("The giveaway server couldn't accept the entry"));
+                    throw new Exception("The giveaway server couldn't accept the entry");
                 }
 
             } catch (Exception $e){
                 Cache::put(self::$GIVEAWAY_SERVER_STATUS_CACHE_KEY, false, 60); //1 minute
-                $this->fail($e);
+                throw $e;
             }
         } else {
-            $this->fail(new Exception("The giveaway server is not running."));
+            throw new Exception("The giveaway server is not running.");
         }
     }
 }

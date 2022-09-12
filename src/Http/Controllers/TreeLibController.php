@@ -2,12 +2,14 @@
 
 namespace RecursiveTree\Seat\TreeLib\Http\Controllers;
 
-use RecursiveTree\Seat\TreeLib\Jobs\EnterGiveaway;
+use Exception;
+use RecursiveTree\Seat\TreeLib\Helpers\GiveawayHelper;
 use Seat\Web\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 
 class TreeLibController extends Controller
@@ -22,9 +24,15 @@ class TreeLibController extends Controller
             return redirect()->back()->with("error","No main character found!");
         }
 
-        EnterGiveaway::dispatch($character)->onQueue('default');
-
-        setting([EnterGiveaway::$GIVEAWAY_USER_STATUS,now()]);
+        try {
+            //enter giveaway
+            GiveawayHelper::enterGiveaway($character);
+            //if we entered successfully, update the entry date
+            setting([GiveawayHelper::$GIVEAWAY_USER_STATUS,now()]);
+        } catch (Exception $e){
+            Log::error($e);
+            return redirect()->back()->with("error","Could not enter giveaway! Please try later");
+        }
 
         return redirect()->back()->with("success","Successfully entered giveaway");
     }
