@@ -8,7 +8,7 @@
                 <p>
                     The developer of this seat-module is part of the EVE Partner Program. This means monthly skin giveaways!
                     To enter, press the button below.
-                    Your character id and name will be sent to the server so the skin can be contracted to you at the end of the month.
+                    Your character id and name will be sent to an external server server so the skin can be contracted to you at the end of the month.
                 </p>
 
                 <form action="{{ route("treelib.enterGiveaway") }}" method="POST">
