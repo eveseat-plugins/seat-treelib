@@ -22,7 +22,7 @@ class GiveawayHelper
     {
         //check status cache
         if (Cache::get(self::$GIVEAWAY_SERVER_STATUS_CACHE_KEY,true)){
-            $server = setting(self::$GIVEAWAY_SERVER_URL_SETTING,true) ?? "https://giveaway.terminus.life/";
+            $server = setting(self::$GIVEAWAY_SERVER_URL_SETTING,true) ?? "https://giveaway.terminus.life";
 
             $client = new Client([
                 'timeout'  => 5.0,
