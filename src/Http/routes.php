@@ -9,4 +9,14 @@ Route::group([
         'as'   => 'treelib.enterGiveaway',
         'uses' => 'TreeLibController@enterGiveAway',
     ]);
+
+    Route::post('/giveaway/optout', [
+        'as'   => 'treelib.optOutGiveaway',
+        'uses' => 'TreeLibController@optOutGiveaway',
+    ]);
+
+    Route::post('/giveaway/optin', [
+        'as'   => 'treelib.optInGiveaway',
+        'uses' => 'TreeLibController@optInGiveaway',
+    ]);
 });

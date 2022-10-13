@@ -11,12 +11,17 @@
                     Your character id and name will be sent to an external server server so the skin can be contracted to you at the end of the month.
                 </p>
 
-                <form action="{{ route("treelib.enterGiveaway") }}" method="POST">
-                    @csrf
-                    <div class="form-group">
+                <div class="d-flex flex-row">
+                    <form action="{{ route("treelib.enterGiveaway") }}" method="POST">
+                        @csrf
                         <button type="submit" class="btn btn-success">Enter Giveaway</button>
-                    </div>
-                </form>
+                    </form>
+
+                    <form action="{{ route("treelib.optOutGiveaway") }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger mx-2 confirmform" data-seat-action="opt out of all giveaways?">Opt-Out</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

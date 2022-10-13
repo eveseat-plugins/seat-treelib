@@ -4,6 +4,7 @@ namespace RecursiveTree\Seat\TreeLib;
 
 use RecursiveTree\Seat\TreeLib\Helpers\GiveawayHelper;
 use RecursiveTree\Seat\TreeLib\Http\Composers\EditAccessControlComposer;
+use RecursiveTree\Seat\TreeLib\Jobs\UpdateGiveawayServerStatus;
 use Seat\Services\AbstractSeatPlugin;
 
 use Illuminate\Support\Facades\View;
@@ -26,30 +27,38 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
             __DIR__ . '/resources/js' => public_path('treelib/js')
         ]);
 
-        Artisan::command('treelib:giveawayserver {server}', function ($server) {
-            setting([GiveawayHelper::$GIVEAWAY_SERVER_URL_SETTING,$server],true);
+        Artisan::command('treelib:giveaway:server {server}', function ($server) {
+            TreeLibSettings::$GIVEAWAY_SERVER_URL->set($server);
+        });
+
+        Artisan::command('treelib:giveaway:server:status {--sync}', function () {
+            if ($this->option("sync")){
+                $this->info("processing...");
+                UpdateGiveawayServerStatus::dispatchNow();
+                $this->info("Updated server status.");
+
+                $url = TreeLibSettings::$GIVEAWAY_SERVER_URL->get();
+
+                if(Cache::get(GiveawayHelper::$GIVEAWAY_SERVER_STATUS_CACHE_KEY)){
+                    $this->info("The giveaway server at $url is ready.");
+                } else {
+                    $this->info("The giveaway server at $url is unavailable.");
+                }
+            } else {
+                UpdateGiveawayServerStatus::dispatch()->onQueue('default');
+                $this->info("Scheduled server status update!");
+            }
         });
 
         View::composer('treelib::giveaway', function ($view) {
-            $server_status = Cache::get(GiveawayHelper::$GIVEAWAY_SERVER_STATUS_CACHE_KEY,true) && Gate::allows('treelib-enter-giveaway');
+            $server_status = Cache::get(GiveawayHelper::$GIVEAWAY_SERVER_STATUS_CACHE_KEY,true) && GiveawayHelper::canUserEnter();
 
             $view->with("giveaway_active",$server_status);
-        });
-
-        Gate::define('treelib-enter-giveaway', function (User $user) {
-            $last_entered = setting(GiveawayHelper::$GIVEAWAY_USER_STATUS);
-            if ($last_entered){
-                $time = carbon($last_entered);
-                if ($time->diffInDays(now())<28){
-                    return false;
-                }
-            }
-            return true;
         });
     }
 
     public function register(){
-
+        TreeLibSettings::init();
     }
 
     public function getName(): string
