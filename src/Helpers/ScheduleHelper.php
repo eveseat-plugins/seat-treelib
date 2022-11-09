@@ -13,6 +13,8 @@ class ScheduleHelper
         $schedule->allow_overlap = false;
         $schedule->allow_maintenance = false;
         $schedule->save();
+
+        return $schedule->id;
     }
 
     public static function removeCommand($command){

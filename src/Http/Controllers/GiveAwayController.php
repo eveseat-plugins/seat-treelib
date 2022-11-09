@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Gate;
 
 
-class TreeLibController extends Controller
+class GiveAwayController extends Controller
 {
 
     public function enterGiveAway(){
