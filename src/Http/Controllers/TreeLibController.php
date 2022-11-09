@@ -36,10 +36,11 @@ class TreeLibController extends Controller
             //enter giveaway
             $message = GiveawayHelper::enterGiveaway($character);
             //if we entered successfully, update the entry date
-            TreeLibSettings::$GIVEAWAY_USER_ENTRY_DATE->set(now());
+            TreeLibSettings::$GIVEAWAY_USER_RESET_CYCLE->set(TreeLibSettings::$GIVEAWAY_RESET_CYCLE->get(0));
 
             return redirect()->back()->with("success",$message);
         } catch (Exception $e){
+            dd($e);
             return redirect()->back()->with("error","Could not enter giveaway. Please try again later. If the issue persists, contact recursive_tree#6692");
         }
     }

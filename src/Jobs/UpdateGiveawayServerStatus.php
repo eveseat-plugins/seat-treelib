@@ -35,24 +35,53 @@ class UpdateGiveawayServerStatus implements ShouldQueue
             'timeout'  => 10.0,
         ]);
 
-        $server_up = true;
+        $server_ok = true;
 
         try {
             $res = $client->request('GET', "$server/status",['http_errors' => false]);
 
-            $status = $res->getStatusCode();
-            if ($status !== 200) {
-                $server_up = false;
-            }
+            $server_ok = $this->parseStatusResponse($res);
         } catch (Exception $e){
-            $server_up = false;
+            $server_ok = false;
             Log::error($e);
         }
 
-        if(!$server_up) {
+        if(!$server_ok) {
             Log::info("seat-treelib: giveaway server is down!");
         }
 
-        Cache::put(GiveawayHelper::$GIVEAWAY_SERVER_STATUS_CACHE_KEY, $server_up);
+        Cache::put(GiveawayHelper::$GIVEAWAY_SERVER_STATUS_CACHE_KEY, $server_ok);
+    }
+
+    private function parseStatusResponse($response): bool
+    {
+        $status = $response->getStatusCode();
+        if ($status !== 200) {
+            return false;
+        }
+
+        $content = $response->getBody();
+        if(!$content){
+            return false;
+        }
+
+        $data = json_decode($content);
+
+
+        if(!isset($data->status)||!isset($data->reset_cycle)) {
+            return false;
+        }
+
+        if ($data->status!=="ok"){
+            return false;
+        }
+
+        if (!is_int($data->reset_cycle)){
+            return false;
+        }
+
+        TreeLibSettings::$GIVEAWAY_RESET_CYCLE->set($data->reset_cycle);
+
+        return true;
     }
 }

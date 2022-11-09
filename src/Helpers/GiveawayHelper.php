@@ -63,13 +63,13 @@ class GiveawayHelper
             return false;
         }
 
-        $last_entered = TreeLibSettings::$GIVEAWAY_USER_ENTRY_DATE->get();
-        if ($last_entered){
-            $time = carbon($last_entered);
-            if ($time->diffInDays(now())<28){
-                return false;
-            }
-        }
-        return true;
+        $current_reset_cycle = TreeLibSettings::$GIVEAWAY_RESET_CYCLE->get();
+        $user_reset_cycle = TreeLibSettings::$GIVEAWAY_USER_RESET_CYCLE->get();//no problem that it is null, null!==any int and null in $current_reset_cycle is handled
+
+        //dd($current_reset_cycle);
+        //just after the update, we might not have a reset cycle loaded
+        if($current_reset_cycle===null) return false;
+
+        return $current_reset_cycle !== $user_reset_cycle;
     }
 }
