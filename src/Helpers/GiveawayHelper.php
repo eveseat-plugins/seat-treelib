@@ -64,11 +64,23 @@ class GiveawayHelper
         }
 
         $current_reset_cycle = TreeLibSettings::$GIVEAWAY_RESET_CYCLE->get();
-        $user_reset_cycle = TreeLibSettings::$GIVEAWAY_USER_RESET_CYCLE->get();//no problem that it is null, null!==any int and null in $current_reset_cycle is handled
+        $user_reset_cycle = TreeLibSettings::$GIVEAWAY_USER_RESET_CYCLE->get();
 
         //dd($current_reset_cycle);
         //just after the update, we might not have a reset cycle loaded
         if($current_reset_cycle===null) return false;
+
+        //in the reset cycle after the update, continue using the old code. This is so that you can't enter with the old system and then again with the new system
+        if($user_reset_cycle==null){
+            $last_entered = TreeLibSettings::$GIVEAWAY_USER_ENTRY_DATE->get();
+            if ($last_entered){
+                $time = carbon($last_entered);
+                if ($time->diffInDays(now())<35){
+                    return false;
+                }
+            }
+            return true;
+        }
 
         return $current_reset_cycle !== $user_reset_cycle;
     }
