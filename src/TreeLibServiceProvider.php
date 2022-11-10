@@ -22,6 +22,7 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
 
         $this->loadViewsFrom(__DIR__ . '/resources/views/', 'treelib');
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations/');
+        $this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'treelib');
 
         $this->publishes([
             __DIR__ . '/resources/js' => public_path('treelib/js')
