@@ -6,5 +6,6 @@ return [
                                 Your character id and name will be sent to an external server server so the skin can be contracted to you at the end of the month.",
     "enter_giveaway_button" => "Enter Giveaway",
     "optout_giveaway_button" => "Opt-Out",
+    "optin_giveaway_button" => "Opt-In",
     "optout_giveaway_confirm"=> "opt out of all giveaways"
 ];

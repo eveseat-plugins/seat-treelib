@@ -16,6 +16,7 @@
                     </form>
 
                     <form action="{{ route("treelib.optOutGiveaway") }}" method="POST">
+                        <input type="hidden" name="state" value="1">
                         @csrf
                         <button type="submit" class="btn btn-danger mx-2 confirmform" data-seat-action="{{ trans("treelib::giveaway.optout_giveaway_confirm") }}">{{ trans("treelib::giveaway.optout_giveaway_button") }}</button>
                     </form>

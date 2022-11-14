@@ -45,14 +45,12 @@ class GiveAwayController extends Controller
         }
     }
 
-    public function optOutGiveaway(){
-        TreeLibSettings::$GIVEAWAY_USER_OPTOUT->set(true);
-        return redirect()->back()->with("success","Successfully opted out of all giveaways.");
-    }
+    public function optOutGiveaway(Request $request){
+        $request->validate([
+            "state"=>"required|boolean"
+        ]);
 
-    public function optInGiveaway(){
-        TreeLibSettings::$GIVEAWAY_USER_OPTOUT->set(false);
-        TreeLibSettings::$GIVEAWAY_USER_ENTRY_DATE->set(null);
-        return redirect()->back()->with("success","Successfully enabled giveaways.");
+        TreeLibSettings::$GIVEAWAY_USER_OPTOUT->set(boolval($request->state));
+        return redirect()->back()->with("success","Successfully opted out of all giveaways.");
     }
 }

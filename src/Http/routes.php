@@ -14,11 +14,6 @@ Route::group([
         'as'   => 'treelib.optOutGiveaway',
         'uses' => 'GiveAwayController@optOutGiveaway',
     ]);
-
-    Route::post('/giveaway/optin', [
-        'as'   => 'treelib.optInGiveaway',
-        'uses' => 'GiveAwayController@optInGiveaway',
-    ]);
 });
 
 Route::group([
@@ -26,8 +21,8 @@ Route::group([
     'middleware' => ['web', 'auth'],
     'prefix' => 'profile',
 ], function () {
-    Route::get('/treelib/settings/discord', [
-        'as'   => 'treelib.discordSettings',
-        'uses' => 'SettingsController@discordSettings',
+    Route::get('/treelib/settings', [
+        'as'   => 'treelib.settings',
+        'uses' => 'SettingsController@settings',
     ]);
 });

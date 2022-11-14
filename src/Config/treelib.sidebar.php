@@ -13,12 +13,12 @@ return [
                 'icon'  => 'fas fa-user',
                 'route' => 'profile.view',
             ],
-            //discord notifications page
+            //treelib settings page
             [
-                'name'  => 'discord',
-                'label' => 'treelib::treelib.discord_settings',
-                'icon'  => 'fab fa-discord',
-                'route' => 'treelib.discordSettings',
+                'name'  => 'treelib_settings',
+                'label' => 'treelib::treelib.treelib_settings',
+                'icon'  => 'fas fa-cogs',
+                'route' => 'treelib.settings',
             ]
         ]
     ]
