@@ -59,6 +59,7 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
     }
 
     public function register(){
+        $this->mergeConfigFrom(__DIR__ . '/Config/treelib.sidebar.php','package.sidebar');
         TreeLibSettings::init();
     }
 

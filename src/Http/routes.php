@@ -7,16 +7,27 @@ Route::group([
 ], function () {
     Route::post('/giveaway/enter', [
         'as'   => 'treelib.enterGiveaway',
-        'uses' => 'TreeLibController@enterGiveAway',
+        'uses' => 'GiveAwayController@enterGiveAway',
     ]);
 
     Route::post('/giveaway/optout', [
         'as'   => 'treelib.optOutGiveaway',
-        'uses' => 'TreeLibController@optOutGiveaway',
+        'uses' => 'GiveAwayController@optOutGiveaway',
     ]);
 
     Route::post('/giveaway/optin', [
         'as'   => 'treelib.optInGiveaway',
-        'uses' => 'TreeLibController@optInGiveaway',
+        'uses' => 'GiveAwayController@optInGiveaway',
+    ]);
+});
+
+Route::group([
+    'namespace'  => 'RecursiveTree\Seat\TreeLib\Http\Controllers',
+    'middleware' => ['web', 'auth'],
+    'prefix' => 'profile',
+], function () {
+    Route::get('/treelib/settings/discord', [
+        'as'   => 'treelib.discordSettings',
+        'uses' => 'SettingsController@discordSettings',
     ]);
 });
