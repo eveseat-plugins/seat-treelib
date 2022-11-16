@@ -2,6 +2,7 @@
 
 namespace RecursiveTree\Seat\TreeLib;
 
+use Exception;
 use RecursiveTree\Seat\TreeLib\Helpers\GiveawayHelper;
 use RecursiveTree\Seat\TreeLib\Http\Composers\EditAccessControlComposer;
 use RecursiveTree\Seat\TreeLib\Jobs\UpdateGiveawayServerStatus;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
-use Seat\Web\Models\User;
+use Illuminate\Support\Facades\Blade;
 
 class TreeLibServiceProvider extends AbstractSeatPlugin
 {
@@ -51,10 +52,21 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
             }
         });
 
+        Artisan::command('treelib:test {--sync}', function () {
+            throw new Exception("asd".strval($this->option("sync")));
+        });
+
         View::composer('treelib::giveaway', function ($view) {
             $server_status = Cache::get(GiveawayHelper::$GIVEAWAY_SERVER_STATUS_CACHE_KEY,true) && GiveawayHelper::canUserEnter();
 
             $view->with("giveaway_active",$server_status);
+        });
+
+        Blade::directive('checked', function($condition) {
+            return "<?php if($condition){ echo \"checked=\\\"checked\\\"\"; } ?>";
+        });
+        Blade::directive('selected', function($condition) {
+            return "<?php if($condition){ echo \"selected=\\\"selected\\\"\"; } ?>";
         });
     }
 
