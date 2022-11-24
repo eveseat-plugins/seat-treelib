@@ -7,6 +7,15 @@ use Seat\Eveapi\Models\Sde\InvType;
 
 class Parser
 {
+    public static function parseFitOrMultiBuy($data, $withPrices){
+        //check if it starts with a fit header
+        if(preg_match("/\[[^,]+,[^,]+]/",$data)){
+            return self::parseFit($data);
+        } else {
+            return self::parseMultiBuy($data, $withPrices);
+        }
+    }
+
     public static function parseFit($fit){
         $fit = preg_replace('~\R~u', "\n", $fit);
 
@@ -44,8 +53,8 @@ class Parser
         }
         $name = $matches[1];
 
-        return [
-            'items' => self::convertToTypeIDList($items),
+        return (object)[
+            'items' => self::convertToItemList($items)->simplify(),
             'name' => $name
         ];
     }
@@ -70,12 +79,12 @@ class Parser
         ];
 
         return (object)[
-            "items"=>self::convertToTypeIDList($intermediate),
+            "items"=>self::convertToItemList($intermediate),
             "prices"=>$matches["item_price"]??null,
         ];
     }
 
-    public static function convertToTypeIDList($item_list): array
+    private static function convertToItemList($item_list)
     {
         $type_list = [];
 
@@ -96,6 +105,6 @@ class Parser
 
             $type_list[] = $stock_item;
         }
-        return $type_list;
+        return new ItemList($type_list);
     }
 }
