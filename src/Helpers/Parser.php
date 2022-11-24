@@ -50,13 +50,17 @@ class Parser
         ];
     }
 
-    public static function parseMultiBuy($multibuy): array
+    public static function parseMultiBuy($multibuy,$withPrices): object
     {
         $multibuy = preg_replace('~\R~u', "\n", $multibuy);
 
         $matches = [];
 
-        preg_match_all("/^(?<item_name>[\w '-]+?)\s+x?(?<item_amount>\d+)(?:\s+-)*(?:\s+(?<item_price>\d+)(?:ISK)?)?$/m",$multibuy, $matches);
+        if($withPrices) {
+            preg_match_all("/^(?<item_name>[\w '-]+?)\s+x?(?<item_amount>\d+)(?:\s+-)*(?:\s+(?<item_price>\d+)(?:ISK)?)?$/m", $multibuy, $matches);
+        } else {
+            preg_match_all("/^(?<item_name>[\w '-]+?)\s+x?(?<item_amount>\d+)(?:\s+-)*$/m", $multibuy, $matches);
+        }
 
         //dd($matches,$multibuy);
 
@@ -65,7 +69,10 @@ class Parser
             'item_amount'=>$matches['item_amount']
         ];
 
-        return self::convertToTypeIDList($intermediate);
+        return (object)[
+            "items"=>self::convertToTypeIDList($intermediate),
+            "prices"=>$matches["item_price"]??null,
+        ];
     }
 
     public static function convertToTypeIDList($item_list): array
