@@ -76,7 +76,7 @@ class Parser
 
             if($item_list['item_amount'][$i] != "") {
                 $amount = intval($item_list['item_amount'][$i]);
-                if ($amount == 0) continue;
+                if ($amount < 1) continue;
             } else {
                 $amount = 1;
             }
