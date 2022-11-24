@@ -56,7 +56,7 @@ class Parser
 
         $matches = [];
 
-        preg_match_all("/^^(?<item_name>[\w '-]+?)\s+(?:x)?(?<item_amount>\d+)/m",$multibuy, $matches);
+        preg_match_all("/^(?<item_name>[\w '-]+?)\s+x?(?<item_amount>\d+)(?:\s+-)*(?:\s+(?<item_price>\d+)(?:ISK)?)?$/m",$multibuy, $matches);
 
         //dd($matches,$multibuy);
 
