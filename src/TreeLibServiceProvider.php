@@ -40,9 +40,10 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
                 $this->info("Updated server status.");
 
                 $url = TreeLibSettings::$GIVEAWAY_SERVER_URL->get();
+                $reset_cycle = TreeLibSettings::$GIVEAWAY_RESET_CYCLE->get();
 
                 if(Cache::get(GiveawayHelper::$GIVEAWAY_SERVER_STATUS_CACHE_KEY)){
-                    $this->info("The giveaway server at $url is ready.");
+                    $this->info("The giveaway server at $url is ready. The reset cycle is $reset_cycle.");
                 } else {
                     $this->info("The giveaway server at $url is unavailable.");
                 }
