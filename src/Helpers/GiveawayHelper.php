@@ -21,7 +21,7 @@ class GiveawayHelper
     {
         //check status cache
         if (Cache::get(self::$GIVEAWAY_SERVER_STATUS_CACHE_KEY,true)){
-            $server = TreeLibSettings::$GIVEAWAY_SERVER_URL->get("https://giveaway.terminus.life");
+            $server = TreeLibSettings::$GIVEAWAY_SERVER_URL->get("https://seat-giveaway.azurewebsites.net/");
 
             $client = new Client([
                 'timeout'  => 5.0,
