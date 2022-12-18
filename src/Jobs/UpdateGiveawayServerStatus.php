@@ -29,7 +29,7 @@ class UpdateGiveawayServerStatus implements ShouldQueue
 
     public function handle()
     {
-        $server = TreeLibSettings::$GIVEAWAY_SERVER_URL->get("https://seat-giveaway.azurewebsites.net/");
+        $server = TreeLibSettings::$GIVEAWAY_SERVER_URL->get("https://seat-giveaway.azurewebsites.net");
 
         $client = new Client([
             'timeout'  => 10.0,
