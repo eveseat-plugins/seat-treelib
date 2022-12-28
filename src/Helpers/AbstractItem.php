@@ -9,7 +9,10 @@ abstract class AbstractItem
     abstract function getTypeId();
     abstract function getAmount();
 
-    public function name(){
+    /**
+     * @return string the item name
+     */
+    public function getName(){
         $type_id = $this->getTypeId();
         $type = InvType::find($type_id);
         if($type!=null) {
@@ -17,6 +20,14 @@ abstract class AbstractItem
         } else {
             return "unknown-item-$type_id";
         }
+    }
+
+    /**
+     * @deprecated
+     * @return string the item name
+     */
+    public function name(){
+        return $this->getName();
     }
 
     public function toJson(){

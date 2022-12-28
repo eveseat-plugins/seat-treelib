@@ -43,4 +43,13 @@ class ItemList
         return count($this->items);
     }
 
+    public function getMultibuy(){
+        $multibuy = "";
+        foreach ($this->items as $item){
+            $name = $item->name();
+            $quantity = $item->getAmount();
+            $multibuy .= "$name $quantity" . PHP_EOL;
+        }
+    }
+
 }
