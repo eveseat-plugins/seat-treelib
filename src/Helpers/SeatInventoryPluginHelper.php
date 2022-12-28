@@ -11,7 +11,8 @@ class SeatInventoryPluginHelper
             && class_exists(self::$LOCATION_MODEL)
             && class_exists(self::$STOCK_MODEL)
             && class_exists(self::$STOCK_ITEM_MODEL)
-            && class_exists(self::$STOCK_GROUP_MODEL);
+            && class_exists(self::$STOCK_GROUP_MODEL)
+            && class_exists(self::$WORKSPACE_MODEL);
     }
 
     public static $INVENTORY_ITEM_MODEL = "RecursiveTree\Seat\Inventory\Models\InventoryItem";
@@ -20,4 +21,5 @@ class SeatInventoryPluginHelper
     public static $STOCK_MODEL = "RecursiveTree\Seat\Inventory\Models\Stock";
     public static $STOCK_ITEM_MODEL = "RecursiveTree\Seat\Inventory\Models\StockItem";
     public static $STOCK_GROUP_MODEL = "RecursiveTree\Seat\Inventory\Models\StockCategory";
+    public static $WORKSPACE_MODEL = "RecursiveTree\Seat\Inventory\Models\Workspace";
 }
