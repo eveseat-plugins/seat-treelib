@@ -50,6 +50,7 @@ class ItemList
             $quantity = $item->getAmount();
             $multibuy .= "$name $quantity" . PHP_EOL;
         }
+        return $multibuy;
     }
 
 }
