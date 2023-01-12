@@ -1,0 +1,1 @@
+{!! \RecursiveTree\Seat\TreeLib\Helpers\PrioritySystem::getBadge($priority) !!}

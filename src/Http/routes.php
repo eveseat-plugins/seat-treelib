@@ -26,3 +26,14 @@ Route::group([
         'uses' => 'SettingsController@settings',
     ]);
 });
+
+Route::group([
+    'namespace'  => 'RecursiveTree\Seat\TreeLib\Http\Controllers',
+    'middleware' => ['web', 'auth'],
+    'prefix' => 'priority',
+], function () {
+    Route::get('/list', [
+        'as'   => 'treelib.prioritiesList',
+        'uses' => 'PriorityController@priorities',
+    ]);
+});

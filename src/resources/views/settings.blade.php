@@ -39,6 +39,25 @@
                     </div>
                 </div>
 
+{{--                @can("treelib.edit_priority_list")--}}
+{{--                    <div class="card">--}}
+{{--                        <div class="card-body">--}}
+{{--                            <h5 class="card-header">--}}
+{{--                                {{ trans("treelib::treelib.settings_priority_system_settings") }}--}}
+{{--                            </h5>--}}
+{{--                            <div class="card-text my-3 mx-3">--}}
+{{--                                <ul id="priority-list"></ul>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+
+{{--                    <script>--}}
+{{--                        const list = document.getElementById("priority-list")--}}
+
+{{--                        fetch("{{route()}}")--}}
+{{--                    </script>--}}
+{{--                @endcan--}}
+
             </div>
         </div>
     </div>
