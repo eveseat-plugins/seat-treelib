@@ -55,7 +55,8 @@ class Parser
 
         return (object)[
             'items' => self::convertToItemList($items)->simplify(),
-            'name' => $name
+            'name' => $name,
+            'prices'=>null
         ];
     }
 
