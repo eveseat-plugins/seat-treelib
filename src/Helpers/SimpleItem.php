@@ -2,6 +2,8 @@
 
 namespace RecursiveTree\Seat\TreeLib\Helpers;
 
+use Seat\Eveapi\Models\Sde\InvType;
+
 class SimpleItem extends AbstractItem
 {
     private $amount;
@@ -25,5 +27,9 @@ class SimpleItem extends AbstractItem
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    public function getTypeModel(){
+        return InvType::find($this->getTypeId());
     }
 }
