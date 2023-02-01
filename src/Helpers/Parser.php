@@ -16,8 +16,29 @@ class Parser
         }
     }
 
+    private static function fixNewlines($string){
+        return preg_replace('~\R~u', "\n", $string);
+    }
+
+    public static function parseInventoryExpanded($data){
+        $data = self::fixNewlines($data);
+
+        $matches = [];
+        preg_match_all("/^(?<item_name>[\w *'-_]+?)\s(?<item_amount>\d+)?\s/m", $data, $matches);
+
+        $intermediate = [
+            'item_names'=>$matches['item_name'],
+            'item_amount'=>$matches['item_amount']
+        ];
+
+        return (object)[
+            "items"=>self::convertToItemList($intermediate),
+            "prices"=>$matches["item_price"]??null,
+        ];
+    }
+
     public static function parseFit($fit){
-        $fit = preg_replace('~\R~u', "\n", $fit);
+        $fit = self::fixNewlines($fit);
 
         $items = [
             'item_names'=>[],
@@ -62,7 +83,7 @@ class Parser
 
     public static function parseMultiBuy($multibuy,$withPrices): object
     {
-        $multibuy = preg_replace('~\R~u', "\n", $multibuy);
+        $multibuy = self::fixNewlines($multibuy);
 
         $matches = [];
 
