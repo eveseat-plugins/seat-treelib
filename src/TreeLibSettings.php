@@ -11,6 +11,7 @@ class TreeLibSettings
     public static $GIVEAWAY_SERVER_URL;
     public static $GIVEAWAY_RESET_CYCLE;
     public static $GIVEAWAY_USER_RESET_CYCLE;
+    public static $INSTANCE_CONTACT_MAIL;
 
     public static function init(){
         self::$GIVEAWAY_USER_OPTOUT         = Setting::create("treelib","giveaway.user.optout",false);
@@ -20,5 +21,8 @@ class TreeLibSettings
         //these need manual keys, since they were created before the setting system
         self::$GIVEAWAY_USER_ENTRY_DATE     = Setting::createFromKey("treelib_giveaway_status",false);
         self::$GIVEAWAY_SERVER_URL          = Setting::createFromKey("treelib_giveaway_server_url",true);
+
+        // a seat setting, this is just a wrapper around it
+        self::$INSTANCE_CONTACT_MAIL          = Setting::createFromKey("admin_contact",true);
     }
 }

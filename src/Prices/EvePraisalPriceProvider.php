@@ -6,10 +6,15 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use RecursiveTree\Seat\TreeLib\Helpers\SimpleItemWithPrice;
+use RecursiveTree\Seat\TreeLib\TreeLibServiceProvider;
+use RecursiveTree\Seat\TreeLib\TreeLibSettings;
+use Seat\Services\Traits\VersionsManagementTrait;
 
 
 class EvePraisalPriceProvider extends AbstractPriceProvider
 {
+    use VersionsManagementTrait;
+
     public static function getPrices($items, $settings)
     {
         $evepraisal_request = [];
@@ -26,17 +31,22 @@ class EvePraisalPriceProvider extends AbstractPriceProvider
             $client = new Client([
                 'timeout'  => 5.0,
             ]);
+            $contact = TreeLibSettings::$INSTANCE_CONTACT_MAIL->get("recursivetreemail@gmail.com");
+
             $response = $client->request('POST', "https://evepraisal.com/appraisal/structured.json",[
                 'json' => [
                     'market_name' => $settings->getPreferredMarketHub(),
-                    'persist' => 'false',
+                    'persist' => 'no',
                     'items'=>$evepraisal_request,
+                ],
+                'headers' => [
+                    'User-Agent'=>"seat:seat-treelib-plugin / 1.x admin/$contact"
                 ]
             ]);
             //decode request
             $data = json_decode( $response->getBody());
         } catch (GuzzleException $e){
-            throw new Exception("Failed to load prices from evepraisal!");
+            throw new Exception("Failed to load prices from evepraisal! $e");
         }
 
         return array_map(function ($item) use ($settings) {
