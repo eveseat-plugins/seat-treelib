@@ -2,6 +2,7 @@
 
 namespace RecursiveTree\Seat\TreeLib\Prices;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use RecursiveTree\Seat\TreeLib\Helpers\SimpleItemWithPrice;
