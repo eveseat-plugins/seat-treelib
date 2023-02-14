@@ -3,6 +3,7 @@
 namespace RecursiveTree\Seat\TreeLib\Helpers;
 
 use Exception;
+use Seat\Eveapi\Models\Sde\InvGroup;
 use Seat\Eveapi\Models\Sde\InvType;
 
 class Parser
@@ -24,11 +25,13 @@ class Parser
         $data = self::fixNewlines($data);
 
         $matches = [];
-        preg_match_all("/^(?<item_name>[\w *'-_]+?)\s(?<item_amount>\d+)?\s/m", $data, $matches);
+        preg_match_all("/^(?<item_name>[\w *'-_]+?)\t(?<item_amount>\d+)?\t(?<group_name>[\w *'-_]+?)\t.*?\t.*?\t(?<item_volumes>\d[\d’]+) m3\t/m", $data, $matches);
 
         $intermediate = [
             'item_names'=>$matches['item_name'],
-            'item_amount'=>$matches['item_amount']
+            'item_amount'=>$matches['item_amount'],
+            'item_groups'=>$matches['group_name'],
+            'item_volumes'=>$matches['item_volumes']
         ];
 
         return (object)[
@@ -121,7 +124,22 @@ class Parser
 
             $item = $item_list['item_names'][$i];
             $result = InvType::where('typeName', $item)->first();
-            if($result == null) continue;
+            if($result == null) {
+                //the type can't be determined over the name, look over the group and volume
+                if(array_key_exists("item_groups",$item_list)&&array_key_exists("item_volumes",$item_list)){
+                    $group_name = $item_list["item_groups"][$i];
+                    $groupID = InvGroup::where("groupName",$group_name)->pluck("groupID");
+                    if ($groupID === null) continue;
+                    $result = InvType::where("groupID",$groupID)
+                        ->where("volume",intval(str_replace('’','',$item_list["item_volumes"][$i])))
+                        ->first();
+                    if($result == null){
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+            }
 
             $stock_item = new SimpleItem($result->typeID,$amount);
 
