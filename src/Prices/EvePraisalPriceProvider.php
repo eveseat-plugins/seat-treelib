@@ -17,6 +17,11 @@ class EvePraisalPriceProvider extends AbstractPriceProvider
 
     public static function getPrices($items, $settings)
     {
+        //evepraisal doesn't allow empty requests
+        if($items->count()<1){
+            return [];
+        }
+
         $evepraisal_request = [];
 
         foreach ($items->iterate() as $item){
