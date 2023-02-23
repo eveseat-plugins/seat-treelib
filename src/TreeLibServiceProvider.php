@@ -88,6 +88,17 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
                 return $first;
             });
         });
+
+        //named to keep the old name
+        Collection::macro('toMultibuy', function () {
+            $multibuy = "";
+            foreach ($this as $item){
+                $name = $item->typeModel->typeName;
+                $quantity = $item->amount ?? 1;
+                $multibuy .= "$name $quantity" . PHP_EOL;
+            }
+            return $multibuy;
+        });
     }
 
     public function getName(): string

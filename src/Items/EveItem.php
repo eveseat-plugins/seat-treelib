@@ -17,4 +17,8 @@ class EveItem
     {
         $this->typeModel = $typeModel;
     }
+
+    public static function fromTypeID($type_id){
+        return new EveItem(InvType::find($type_id));
+    }
 }
