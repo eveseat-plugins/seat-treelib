@@ -26,6 +26,7 @@ class Parser
 
         $matches = [];
         preg_match_all("/^(?<item_name>[\w *'-_]+?)\t(?<item_amount>\d+)?\t(?<group_name>[\w *'-_]+?)\t.*?\t.*?\t(?<item_volumes>\d[\d’]+) m3\t/m", $data, $matches);
+        //dd($matches);
 
         $intermediate = [
             'item_names'=>$matches['item_name'],

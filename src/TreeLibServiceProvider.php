@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Collection;
 
 class TreeLibServiceProvider extends AbstractSeatPlugin
 {
@@ -69,12 +70,24 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
         Blade::directive('selected', function($condition) {
             return "<?php if($condition){ echo \"selected=\\\"selected\\\"\"; } ?>";
         });
+
+        $this->extendCollections();
     }
 
     public function register(){
         $this->mergeConfigFrom(__DIR__ . '/Config/treelib.sidebar.php','package.sidebar');
         $this->registerPermissions(__DIR__ . '/Config/treelib.permissions.php', 'treelib');
         TreeLibSettings::init();
+    }
+
+    private function extendCollections(){
+        Collection::macro('simplifyItems', function () {
+            return $this->groupBy("typeModel.typeID")->map(function ($item_list){
+                $first = $item_list->first();
+                $first->amount = $item_list->sum("amount");
+                return $first;
+            });
+        });
     }
 
     public function getName(): string

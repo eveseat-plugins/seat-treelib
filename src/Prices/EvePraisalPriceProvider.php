@@ -18,16 +18,16 @@ class EvePraisalPriceProvider extends AbstractPriceProvider
     public static function getPrices($items, $settings)
     {
         //evepraisal doesn't allow empty requests
-        if($items->count()<1){
-            return [];
+        if($items->isEmpty()){
+            return collect();
         }
 
         $evepraisal_request = [];
 
-        foreach ($items->iterate() as $item){
+        foreach ($items as $item){
             $evepraisal_request[] = [
-                "type_id"=>$item->getTypeId(),
-                "quantity"=>$item->getAmount()
+                "type_id"=>$item->typeModel->typeID,
+                "quantity"=>1
             ];
         }
 
@@ -54,18 +54,20 @@ class EvePraisalPriceProvider extends AbstractPriceProvider
             throw new Exception("Failed to load prices from evepraisal! $e");
         }
 
-        return array_map(function ($item) use ($settings) {
+        //to preserve additional data in the items objects, convert the evepraisal response into a map typeId->price
+        $type_prices = [];
+        foreach ($data->appraisal->items as $item){
             if($settings->getPreferredPriceType()==="sell"){
                 $price = $item->prices->sell->min;
             } else {
                 $price = $item->prices->buy->max;
             }
+            $type_prices[$item->typeID] = $price;
+        }
 
-            return new SimpleItemWithPrice(
-                $item->typeID,
-                $item->quantity,
-                $price
-            );
-        },$data->appraisal->items);
+        return $items->map(function ($item) use ($type_prices){
+            $item->price = $type_prices[$item->typeModel->typeID];
+            return $item;
+        });
     }
 }
