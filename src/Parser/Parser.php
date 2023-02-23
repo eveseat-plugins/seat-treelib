@@ -7,7 +7,11 @@ abstract class Parser
     static function parseItems($text){
         $text = preg_replace('~\R~u', "\n", $text);
 
-        $parsers = [MultibuyParser::class];
+        //from specific to broad
+        $parsers = [
+            MultibuyParserWithPrice::class,
+            MultibuyParser::class
+        ];
 
         foreach ($parsers as $parser){
             $parsed = $parser::parse($text);

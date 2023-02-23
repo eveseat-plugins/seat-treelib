@@ -5,8 +5,6 @@ namespace RecursiveTree\Seat\TreeLib\Prices;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use RecursiveTree\Seat\TreeLib\Helpers\SimpleItemWithPrice;
-use RecursiveTree\Seat\TreeLib\TreeLibServiceProvider;
 use RecursiveTree\Seat\TreeLib\TreeLibSettings;
 use Seat\Services\Traits\VersionsManagementTrait;
 
@@ -66,7 +64,10 @@ class EvePraisalPriceProvider extends AbstractPriceProvider
         }
 
         return $items->map(function ($item) use ($type_prices){
-            $item->price = $type_prices[$item->typeModel->typeID];
+            if($item->price == null) {
+                $item->price = $type_prices[$item->typeModel->typeID];
+            }
+            $item->marketPrice = $type_prices[$item->typeModel->typeID];
             return $item;
         });
     }

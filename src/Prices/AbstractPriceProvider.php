@@ -2,10 +2,6 @@
 
 namespace RecursiveTree\Seat\TreeLib\Prices;
 
-use RecursiveTree\Seat\TreeLib\Helpers\ItemList;
-use RecursiveTree\Seat\TreeLib\Helpers\SimpleItemWithPrice;
-use RecursiveTree\Seat\TreeLib\Items\EveItem;
-
 abstract class AbstractPriceProvider
 {
     /**
