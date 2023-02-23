@@ -9,8 +9,11 @@ abstract class Parser
 
         //from specific to broad
         $parsers = [
-            MultibuyParserWithPrice::class,
-            MultibuyParser::class
+            FitParser::class,
+            InventoryWindowParser::class,
+            MultibuyWithPriceParser::class,
+            MultibuyParser::class,
+            ItemListParser::class
         ];
 
         foreach ($parsers as $parser){

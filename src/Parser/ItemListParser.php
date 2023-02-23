@@ -5,24 +5,20 @@ namespace RecursiveTree\Seat\TreeLib\Parser;
 use RecursiveTree\Seat\TreeLib\Items\EveItem;
 use Seat\Eveapi\Models\Sde\InvType;
 
-class MultibuyParserWithPrice extends Parser
+class ItemListParser extends Parser
 {
     protected static function parse($text)
     {
         $matches = [];
-        $status = preg_match_all("/^(?<names>[\w '-]+?)\s+x?(?<amounts>\d+)(?:\s+-)*(?:\s+(?<prices>\d+)(?:ISK)?)?$/m", $text, $matches);
+        $status = preg_match_all("/^(?<names>[\w '-]+?)$/m", $text, $matches);
         if(!$status) return null;
 
         $names = $matches["names"];
-        $amounts = $matches["amounts"];
-        $prices = $matches["prices"];
 
         $items = [];
 
         for ($i=0;$i<count($names);$i++){
             $item_name = $names[$i];
-            $amount = intval($amounts[$i]);
-            $price = intval($prices[$i]);
 
             $inv_model = InvType::where('typeName', $item_name)->first();
 
@@ -31,9 +27,7 @@ class MultibuyParserWithPrice extends Parser
             }
 
             $item = new EveItem($inv_model);
-            $item->amount = $amount;
-            $item->price = $price;
-            $item->manualPrice = $price;
+            $item->amount = 1;
 
             array_push($items,$item);
         }
