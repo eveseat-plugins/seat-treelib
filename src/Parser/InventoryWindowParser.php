@@ -31,9 +31,9 @@ class InventoryWindowParser extends Parser
 
             $inv_model = InvType::where('typeName', $item_name)->first();
 
-            $is_named = $inv_model==null;
+            $is_named = $inv_model==null || $amount==0;
 
-            if($is_named){
+            if($inv_model==null){
                 //we might be able to determine it over the group+volume
                 $groupID = InvGroup::where("groupName",$group)->pluck("groupID")->first();
                 if($groupID==null) continue;
