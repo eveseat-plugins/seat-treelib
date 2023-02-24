@@ -11,7 +11,7 @@ class InventoryWindowParser extends Parser
     protected static function parse($text)
     {
         $matches = [];
-        $status = preg_match_all("/^(?<name>[\w *'-_]+?)\t(?<amount>\d+)?\t(?<group>[\w *'-_]+?)\t.*?\t.*?\t(?<volume>\d[\d’]+) m3\t(?<price>\d+(?:’\d+)*(?:\.\d\d)?) ISK$/mu", $text, $matches);
+        $status = preg_match_all("/^(?<name>[\w *'-_]+?)\t(?<amount>\d+)?\t(?<group>[\w *'-_]+?)\t.*?\t.*?\t(?<volume>\d[\d’.]+) m3\t(?<price>\d+(?:’\d+)*(?:\.\d\d)?) ISK$/mu", $text, $matches);
         if(!$status) return null;
 
         $names = $matches["name"];
@@ -26,8 +26,8 @@ class InventoryWindowParser extends Parser
             $item_name = $names[$i];
             $amount = intval($amounts[$i]);
             $group = $groups[$i];
-            $volume = intval(str_replace("’","", $volumes[$i]));
-            $price = intval(str_replace("’","", $prices[$i]));
+            $volume = floatval(str_replace("’","", $volumes[$i]));
+            $price = floatval(str_replace("’","", $prices[$i]));
 
             $inv_model = InvType::where('typeName', $item_name)->first();
 
