@@ -6,6 +6,10 @@ trait DynamicProperties
 {
     private $properties = [];
 
+    protected function setProperties($properties){
+        $this->properties = $properties;
+    }
+
     public function __set($name, $value)
     {
         $this->properties[$name] = $value;

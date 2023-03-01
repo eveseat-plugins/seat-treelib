@@ -10,7 +10,7 @@ class MultibuyParser extends Parser
     protected static function parse($text)
     {
         $matches = [];
-        $status = preg_match_all("/^(?<names>[\w '-]+?) x?(?<amounts>\d+)$/m", $text, $matches);
+        $status = preg_match_all("/^(?<names>[\w '-]+?)\s+x?(?<amounts>\d+)$/m", $text, $matches);
         if(!$status) return null;
 
         $names = $matches["names"];
