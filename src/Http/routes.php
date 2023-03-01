@@ -14,6 +14,11 @@ Route::group([
         'as'   => 'treelib.optOutGiveaway',
         'uses' => 'GiveAwayController@optOutGiveaway',
     ]);
+
+    Route::get('/lookup/priceproviders', [
+        'as'   => 'treelib.priceProviderLookup',
+        'uses' => 'LookupController@priceProviders',
+    ]);
 });
 
 Route::group([

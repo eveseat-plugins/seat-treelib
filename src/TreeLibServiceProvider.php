@@ -65,6 +65,10 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
             $view->with("giveaway_active", $server_status);
         });
 
+        $this->publishes([
+            __DIR__.'/Config/treelib.priceproviders.php' => config_path('treelib.priceproviders.php')],["config","seat"]
+        );
+
         Blade::directive('checked', function ($condition) {
             return "<?php if($condition){ echo \"checked=\\\"checked\\\"\"; } ?>";
         });
