@@ -9,30 +9,36 @@ class ItemListParser extends Parser
 {
     protected static function parse($text)
     {
-        $matches = [];
-        $status = preg_match_all("/^(?<names>[\w '-]+?)$/m", $text, $matches);
-        if(!$status) return null;
+        $expr = "^(?<name>.+)$";
 
-        $names = $matches["names"];
+        $lines = self::matchLines($expr, $text);
+        //check if there are any matches
+        if($lines->where("match","!=",null)->isEmpty()) return null;
 
         $items = [];
 
-        for ($i=0;$i<count($names);$i++){
-            $item_name = $names[$i];
+        $warning = false;
 
-            $inv_model = InvType::where('typeName', $item_name)->first();
+        foreach ($lines as $line){
+            if($line->match === null) {
+                $warning = true;
+                continue;
+            }
+
+            $inv_model = InvType::where('typeName', $line->match->name)->first();
 
             if($inv_model==null){
+                $warning = true;
                 continue;
             }
 
             $item = new EveItem($inv_model);
             $item->amount = 1;
-
             array_push($items,$item);
         }
 
         $result = new ParseResult(collect($items));
+        $result->warning = $warning;
         return $result;
     }
 }
