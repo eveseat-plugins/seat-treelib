@@ -25,7 +25,7 @@ abstract class Parser
         foreach ($parsers as $parser){
             $parsed = $parser::parse($text);
             if($parsed !== null) {
-                dd($parser, $parsed);
+                //dd($parser, $parsed);
                 return $parsed;
             }
         }
