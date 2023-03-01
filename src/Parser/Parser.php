@@ -11,10 +11,12 @@ abstract class Parser
 
         //from specific to broad
         $parsers = [
+            //fits
             FitParser::class,
+            // the ingame multibuy
             MultibuyParser::class,
-            // Cap Booster 400 200 can be understood as 400x Cap Booster at 200 ISK or 200x Cap Booster 400, where the second one is correct. This means the normal multibuy parser mus run first.
-            MultibuyWithPriceParser::class,
+            // the old multibuy, but also support prices
+            ManualBuyPrices::class,
             //also bytes on ingame multibuys, so handle it afterwards
             NewInventoryWindowParser::class,
             ItemListParser::class
@@ -23,7 +25,7 @@ abstract class Parser
         foreach ($parsers as $parser){
             $parsed = $parser::parse($text);
             if($parsed !== null) {
-                //dd($parser, $parsed);
+                dd($parser, $parsed);
                 return $parsed;
             }
         }
