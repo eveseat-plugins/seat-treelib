@@ -4,7 +4,7 @@ namespace RecursiveTree\Seat\TreeLib\Parser;
 
 use RecursiveTree\Seat\TreeLib\Helpers\DynamicProperties;
 
-class ParseResult
+class ParseResult implements \JsonSerializable
 {
     use DynamicProperties;
 
@@ -16,5 +16,17 @@ class ParseResult
     public function __construct($items)
     {
         $this->items = $items;
+    }
+
+    public function __serialize(): array
+    {
+        return $this->getProperties();
+    }
+
+    public function jsonSerialize()
+    {
+        return array_merge($this->getProperties(),[
+            "items"=>$this->items,
+        ]);
     }
 }

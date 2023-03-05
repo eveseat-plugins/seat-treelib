@@ -19,6 +19,16 @@ Route::group([
         'as'   => 'treelib.priceProviderLookup',
         'uses' => 'LookupController@priceProviders',
     ]);
+
+    Route::get('/lookup/priceproviders', [
+        'as'   => 'treelib.priceProviderLookup',
+        'uses' => 'LookupController@priceProviders',
+    ]);
+
+    Route::match(['get', 'post'],'/debug/parsers',[
+        'as'   => 'treelib.debugParsers',
+        'uses' => 'ParserTestController@testParser',
+    ]);
 });
 
 Route::group([

@@ -26,12 +26,14 @@ abstract class Parser
             $parsed = $parser::parse($text);
             if($parsed !== null) {
                 //dd($parser, $parsed);
+                $parsed->_debug_parser = $parser;
                 return $parsed;
             }
         }
 
         $result = new ParseResult(collect());
         $result->warning = true;
+        $result->_debug_parser = null;
         return $result;
     }
 

@@ -4,7 +4,7 @@ namespace RecursiveTree\Seat\TreeLib\Items;
 use RecursiveTree\Seat\TreeLib\Helpers\DynamicProperties;
 use Seat\Eveapi\Models\Sde\InvType;
 
-class EveItem
+class EveItem implements \JsonSerializable
 {
     use DynamicProperties;
 
@@ -20,5 +20,13 @@ class EveItem
 
     public static function fromTypeID($type_id){
         return new EveItem(InvType::find($type_id));
+    }
+
+    public function jsonSerialize()
+    {
+        return array_merge($this->getProperties(),[
+           "typeID"=>$this->typeModel->typeID,
+           "name"=> $this->typeModel->typeName,
+        ]);
     }
 }
