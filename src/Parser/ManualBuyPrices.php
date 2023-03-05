@@ -10,9 +10,10 @@ class ManualBuyPrices extends Parser
     protected static function parse($text)
     {
         $expr = implode("", [
-            "^(?<name>.+?)",                                    //item name
-            " x?(?<amount>".self::BIG_NUMBER_REGEXP.")",        //amount
-            "(?: (?<price>".self::BIG_NUMBER_REGEXP.")(?: ?ISK)?)?",      //price
+            "^(?<name>.+?)",                                                //item name
+            " x?(?<amount>".self::BIG_NUMBER_REGEXP.")",                    //amount
+            "(?: (?<price>".self::BIG_NUMBER_REGEXP.")(?: ?ISK)?)?",        //price
+            "$"                                                             //end
         ]);
 
         $lines = self::matchLines($expr, $text);

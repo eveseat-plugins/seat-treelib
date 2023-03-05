@@ -37,6 +37,9 @@ class ItemListParser extends Parser
             array_push($items,$item);
         }
 
+        //if there are no items, ignore
+        if(count($items)<1) return null;
+
         $result = new ParseResult(collect($items));
         $result->warning = $warning;
         return $result;

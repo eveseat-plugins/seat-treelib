@@ -30,12 +30,14 @@ abstract class Parser
             }
         }
 
-        return null;
+        $result = new ParseResult(collect());
+        $result->warning = true;
+        return $result;
     }
 
     protected abstract static function parse($text);
 
-    protected const BIG_NUMBER_REGEXP = "(?:\d+(?:’\d\d\d)*(?:\.\d\d)?)";
+    protected const BIG_NUMBER_REGEXP = "(?:\d+(?:[’ ]\d\d\d)*(?:\.\d\d)?)";
 
     protected static function match($expr, $text){
         $result = preg_match("/$expr/",$text, $match);
@@ -59,6 +61,6 @@ abstract class Parser
 
     protected static function parseBigNumber($number){
         if($number === null) return null;
-        return floatval(str_replace("’","",$number));
+        return floatval(str_replace(["’"," "],"",$number));
     }
 }

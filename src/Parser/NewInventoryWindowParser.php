@@ -44,6 +44,8 @@ class NewInventoryWindowParser extends Parser
             "$"                                                         //end
         ]);
 
+        //dd($expr);
+
         $lines = self::matchLines($expr, $text);
 
         //check if there are any matches
@@ -53,6 +55,7 @@ class NewInventoryWindowParser extends Parser
         $items = [];
 
         foreach ($lines as $line){
+
             //if the line doesn't match, continue
             if ($line->match === null) continue;
 
