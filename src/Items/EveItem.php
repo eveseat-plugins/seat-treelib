@@ -1,10 +1,11 @@
 <?php
 
 namespace RecursiveTree\Seat\TreeLib\Items;
+use JsonSerializable;
 use RecursiveTree\Seat\TreeLib\Helpers\DynamicProperties;
 use Seat\Eveapi\Models\Sde\InvType;
 
-class EveItem implements \JsonSerializable
+class EveItem implements JsonSerializable, ToEveItem
 {
     use DynamicProperties;
 
@@ -28,5 +29,10 @@ class EveItem implements \JsonSerializable
            "typeID"=>$this->typeModel->typeID,
            "name"=> $this->typeModel->typeName,
         ]);
+    }
+
+    public function toEveItem()
+    {
+        return $this;
     }
 }

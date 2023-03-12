@@ -5,6 +5,7 @@ namespace RecursiveTree\Seat\TreeLib;
 use Exception;
 use RecursiveTree\Seat\TreeLib\Helpers\GiveawayHelper;
 use RecursiveTree\Seat\TreeLib\Http\Composers\EditAccessControlComposer;
+use RecursiveTree\Seat\TreeLib\Items\ToEveItem;
 use RecursiveTree\Seat\TreeLib\Jobs\UpdateGiveawayServerStatus;
 use Seat\Services\AbstractSeatPlugin;
 
@@ -107,6 +108,10 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
         Collection::macro('toMultibuy', function () {
             $multibuy = "";
             foreach ($this as $item) {
+                if(is_subclass_of($item,ToEveItem::class)){
+                    $item = $item->toEveItem();
+                }
+
                 $name = $item->typeModel->typeName;
                 $quantity = $item->amount ?? 1;
                 $multibuy .= "$name $quantity" . PHP_EOL;
