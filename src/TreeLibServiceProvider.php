@@ -6,6 +6,8 @@ use Exception;
 use RecursiveTree\Seat\TreeLib\Helpers\GiveawayHelper;
 use RecursiveTree\Seat\TreeLib\Http\Composers\EditAccessControlComposer;
 use RecursiveTree\Seat\TreeLib\Items\ToEveItem;
+use RecursiveTree\Seat\TreeLib\Jobs\OrderAggregates;
+use RecursiveTree\Seat\TreeLib\Jobs\Orders;
 use RecursiveTree\Seat\TreeLib\Jobs\UpdateGiveawayServerStatus;
 use RecursiveTree\Seat\TreeLib\Observers\UserObserver;
 use Seat\Services\AbstractSeatPlugin;
@@ -66,6 +68,12 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
             $server_status = Cache::get(GiveawayHelper::$GIVEAWAY_SERVER_STATUS_CACHE_KEY, true) && GiveawayHelper::canUserEnter();
 
             $view->with("giveaway_active", $server_status);
+        });
+
+        Artisan::command('treelib:esi:prices:update', function () {
+            Orders::withChain([
+                new OrderAggregates(),
+            ])->dispatch();
         });
 
         $this->publishes([
