@@ -2,12 +2,7 @@
 
 namespace RecursiveTree\Seat\TreeLib\Prices;
 
-abstract class AbstractPriceProvider
+abstract class AbstractPriceProvider implements PriceProvider
 {
-    /**
-    * @param Illuminate\Support\Collection $items
-    * @param PriceProviderSettings $settings
-     * @return Illuminate\Support\Collection
-    */
-    public static abstract function getPrices($items,$settings);
+
 }

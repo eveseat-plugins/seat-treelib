@@ -7,13 +7,13 @@ use GuzzleHttp\Exception\GuzzleException;
 use Seat\Eveapi\Models\Market\Price;
 
 
-class CCPPricesPriceProvider extends AbstractPriceProvider
+class SellPricesPriceProvider extends AbstractPriceProvider
 {
 
     public static function getPrices($items, $settings)
     {
         return $items->map(function ($item){
-            $price = Price::find($item->typeModel->typeID)->adjusted_price ?? $item->typeModel->basePrice ?? 0;
+            $price = Price::find($item->typeModel->typeID)->sell_price ?? 0;
             if($item->price == null) {
                 $item->price = $price;
             }
