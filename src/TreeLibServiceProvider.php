@@ -9,7 +9,6 @@ use RecursiveTree\Seat\TreeLib\Items\ToEveItem;
 use RecursiveTree\Seat\TreeLib\Jobs\OrderAggregates;
 use RecursiveTree\Seat\TreeLib\Jobs\Orders;
 use RecursiveTree\Seat\TreeLib\Jobs\UpdateGiveawayServerStatus;
-use RecursiveTree\Seat\TreeLib\Observers\UserObserver;
 use Seat\Services\AbstractSeatPlugin;
 
 use Illuminate\Support\Facades\View;
@@ -18,7 +17,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Collection;
-use Seat\Web\Models\User;
 
 class TreeLibServiceProvider extends AbstractSeatPlugin
 {
@@ -77,7 +75,6 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
         });
 
         $this->publishes([
-            __DIR__ . '/resources/css' => public_path('web/css'),
             __DIR__.'/Config/treelib.priceproviders.php' => config_path('treelib.priceproviders.php')],["config","seat"]
         );
 
@@ -87,8 +84,6 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
         Blade::directive('selected', function ($condition) {
             return "<?php if($condition){ echo \"selected=\\\"selected\\\"\"; } ?>";
         });
-
-        User::observe(UserObserver::class);
 
         $this->extendCollections();
     }
