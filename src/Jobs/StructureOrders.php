@@ -65,17 +65,14 @@ class StructureOrders extends AbstractAuthCharacterJob
         $structure_id = $this->getStructureId();
         $structure = UniverseStructure::find($structure_id);
 
+        // Remove older orders for the structure
         MarketOrder::where('location_id', '=', $this->getStructureId())
             ->delete();
 
         //load all market data
         while (true) {
             //retrieve one page of market orders
-            try {
-                $orders = $this->retrieve(['structure_id' => $structure_id]);
-            } catch (RequestFailedException $e) {
-                dd($e);
-            }
+            $orders = $this->retrieve(['structure_id' => $structure_id]);
 
 
             // map the ESI format to the database format
@@ -124,12 +121,6 @@ class StructureOrders extends AbstractAuthCharacterJob
             // if there are more pages with orders, continue loading them
             if (! $this->nextPage($orders->pages)) break;
         }
-
-        // remove old orders
-        // if this ever gets changed to retain old orders, add an expiry check in the OrderAggregates job.
-        MarketOrder::where('expiry', '<=', now())
-            ->Where('location_id', '=', $this->getStructureId())
-            ->delete();
     }
 
     /**
