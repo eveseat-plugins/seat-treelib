@@ -13,7 +13,7 @@ class FitParser extends Parser
 
         //parse ship type
         $matches = [];
-        $res = preg_match("/\[([^,]+),[^,]+]/",$fit,$matches);
+        $res = preg_match("/\[([^,*]+)\*?,[^,]+]/",$fit,$matches);
         if($res!=1) {
             return null;
         }

@@ -9,7 +9,8 @@ class ItemListParser extends Parser
 {
     protected static function parse($text)
     {
-        $expr = "^(?<name>.+)$";
+        // include translation star
+        $expr = "^(?<name>[^*]+)\*?$";
 
         $lines = self::matchLines($expr, $text);
         //check if there are any matches
