@@ -11,7 +11,7 @@ return [
                 'name'  => 'profile',
                 'label' => 'web::seat.profile',
                 'icon'  => 'fas fa-user',
-                'route' => 'profile.view',
+                'route' => 'seatcore::profile.view',
             ],
             //treelib settings page
             [
