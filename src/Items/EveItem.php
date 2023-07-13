@@ -19,8 +19,10 @@ class EveItem implements JsonSerializable, ToEveItem
         $this->typeModel = $typeModel;
     }
 
-    public static function fromTypeID($type_id){
-        return new EveItem(InvType::find($type_id));
+    public static function fromTypeID($type_id, $data=[]){
+        $item = new EveItem(InvType::find($type_id));
+        $item->setProperties($data);
+        return $item;
     }
 
     public function jsonSerialize()
@@ -31,7 +33,7 @@ class EveItem implements JsonSerializable, ToEveItem
         ]);
     }
 
-    public function toEveItem()
+    public function toEveItem(): EveItem
     {
         return $this;
     }
