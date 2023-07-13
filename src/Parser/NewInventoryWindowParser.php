@@ -31,7 +31,7 @@ class NewInventoryWindowParser extends Parser
     {
 
         $expr = implode("", [
-            "^(?<name>[^\t]+)",                                            //name
+            "^(?<name>[^\t*]+)\*?",                                            //name
             "\t(?<amount>" . self::BIG_NUMBER_REGEXP . "?)",             //amount
             "(?:\t(?<group>\D[^\t]*))?",                                  //group
             "(?:\t(?<category>\D[^\t]*))?",                               //category

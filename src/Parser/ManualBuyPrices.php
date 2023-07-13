@@ -10,7 +10,7 @@ class ManualBuyPrices extends Parser
     protected static function parse($text)
     {
         $expr = implode("", [
-            "^(?<name>.+?)",                                                //item name
+            "^(?<name>[^*]+?)\*?",                                          //item name, including translation star
             " x?(?<amount>".self::BIG_NUMBER_REGEXP.")",                    //amount
             "(?: (?<price>".self::BIG_NUMBER_REGEXP.")(?: ?ISK)?)?",        //price
             "$"                                                             //end

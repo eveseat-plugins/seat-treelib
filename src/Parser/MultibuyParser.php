@@ -10,7 +10,7 @@ class MultibuyParser extends Parser
     protected static function parse($text)
     {
         $expr = implode("", [
-            "^(?<name>[^\t]+)",                             //item name
+            "^(?<name>[^\t*]+)\*?",                             //item name, excluding translation star
             "\t(?<amount>".self::BIG_NUMBER_REGEXP.")?",    //amount
             "\t(?<unit_price>".self::BIG_NUMBER_REGEXP.")?",      //unit price
             "\t(?<total>".self::BIG_NUMBER_REGEXP.")$",     //total price
