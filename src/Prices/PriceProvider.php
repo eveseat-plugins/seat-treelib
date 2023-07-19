@@ -10,4 +10,6 @@ interface PriceProvider
      * @return Illuminate\Support\Collection
      */
     public static function getPrices($items,$settings);
+
+    public const DEFAULT_PRICE_PROVIDER = SellPricesPriceProvider::class;
 }
