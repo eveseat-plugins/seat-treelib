@@ -4,7 +4,6 @@ namespace RecursiveTree\Seat\TreeLib;
 
 use Exception;
 use RecursiveTree\Seat\TreeLib\Helpers\GiveawayHelper;
-use RecursiveTree\Seat\TreeLib\Http\Composers\EditAccessControlComposer;
 use RecursiveTree\Seat\TreeLib\Items\ToEveItem;
 use RecursiveTree\Seat\TreeLib\Jobs\UpdateGiveawayServerStatus;
 use Seat\Services\AbstractSeatPlugin;
@@ -12,7 +11,6 @@ use Seat\Services\AbstractSeatPlugin;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Collection;
 
