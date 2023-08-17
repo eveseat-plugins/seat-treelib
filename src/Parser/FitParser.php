@@ -2,12 +2,11 @@
 
 namespace RecursiveTree\Seat\TreeLib\Parser;
 
-use RecursiveTree\Seat\TreeLib\Items\EveItem;
 use Seat\Eveapi\Models\Sde\InvType;
 
 class FitParser extends Parser
 {
-    protected static function parse($fit)
+    protected static function parse(string $fit, string $EveItemClass)
     {
         $items = [];
 
@@ -18,7 +17,7 @@ class FitParser extends Parser
             return null;
         }
         $inv_model = InvType::where('typeName', $matches[1])->first();
-        $ship = new EveItem($inv_model);
+        $ship = new $EveItemClass($inv_model);
         $ship->amount = 1;
         array_push($items,$ship);
 
@@ -45,7 +44,7 @@ class FitParser extends Parser
                 continue;
             }
 
-            $item = new EveItem($inv_model);
+            $item = new $EveItemClass($inv_model);
             $item->amount = $amount>0 ? $amount:1;
 
             array_push($items,$item);

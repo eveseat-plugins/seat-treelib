@@ -2,12 +2,11 @@
 
 namespace RecursiveTree\Seat\TreeLib\Parser;
 
-use RecursiveTree\Seat\TreeLib\Items\EveItem;
 use Seat\Eveapi\Models\Sde\InvType;
 
 class ManualBuyPrices extends Parser
 {
-    protected static function parse($text)
+    protected static function parse(string $text, string $EveItemClass)
     {
         $expr = implode("", [
             "^(?<name>[^*]+?)\*?",                                          //item name, including translation star
@@ -37,7 +36,7 @@ class ManualBuyPrices extends Parser
                 continue;
             }
 
-            $item = new EveItem($inv_model);
+            $item = new $EveItemClass($inv_model);
             $item->amount = self::parseBigNumber($line->match->amount) ?? 1;
             $item->price = self::parseBigNumber($line->match->price);
             array_push($items,$item);

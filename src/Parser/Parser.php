@@ -3,10 +3,11 @@
 namespace RecursiveTree\Seat\TreeLib\Parser;
 
 use Exception;
+use RecursiveTree\Seat\TreeLib\Items\EveItem;
 
 abstract class Parser
 {
-    static function parseItems($text){
+    static function parseItems($text, string $EveItemClass = EveItem::class){
         $text = preg_replace('~\R~u', "\n", $text);
 
         //from specific to broad
@@ -23,7 +24,7 @@ abstract class Parser
         ];
 
         foreach ($parsers as $parser){
-            $parsed = $parser::parse($text);
+            $parsed = $parser::parse($text, $EveItemClass);
             if($parsed !== null) {
                 //dd($parser, $parsed);
                 $parsed->_debug_parser = $parser;
@@ -37,7 +38,7 @@ abstract class Parser
         return $result;
     }
 
-    protected abstract static function parse($text);
+    protected abstract static function parse(string $text, string $EveItemClass);
 
     protected const BIG_NUMBER_REGEXP = "(?:\d+(?:[’ ]\d\d\d)*(?:\.\d\d)?)";
 

@@ -2,12 +2,11 @@
 
 namespace RecursiveTree\Seat\TreeLib\Parser;
 
-use RecursiveTree\Seat\TreeLib\Items\EveItem;
 use Seat\Eveapi\Models\Sde\InvType;
 
 class ItemListParser extends Parser
 {
-    protected static function parse($text)
+    protected static function parse(string $text, string $EveItemClass)
     {
         // include translation star
         $expr = "^(?<name>[^*]+)\*?$";
@@ -33,7 +32,7 @@ class ItemListParser extends Parser
                 continue;
             }
 
-            $item = new EveItem($inv_model);
+            $item = new $EveItemClass($inv_model);
             $item->amount = 1;
             array_push($items,$item);
         }

@@ -2,7 +2,6 @@
 
 namespace RecursiveTree\Seat\TreeLib\Parser;
 
-use RecursiveTree\Seat\TreeLib\Items\EveItem;
 use Seat\Eveapi\Models\Sde\InvGroup;
 use Seat\Eveapi\Models\Sde\InvType;
 
@@ -27,7 +26,7 @@ class NewInventoryWindowParser extends Parser
         return null;
     }
 
-    protected static function parse($text)
+    protected static function parse(string $text, string $EveItemClass)
     {
 
         $expr = implode("", [
@@ -96,7 +95,7 @@ class NewInventoryWindowParser extends Parser
                 continue;
             }
 
-            $item = new EveItem($type_model);
+            $item = new $EveItemClass($type_model);
             $item->amount = $amount;
             $item->volume = $volume;
             $item->ingamePrice = self::parseBigNumber($line->match->price);
