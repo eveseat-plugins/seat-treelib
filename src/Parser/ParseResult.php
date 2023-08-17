@@ -2,17 +2,16 @@
 
 namespace RecursiveTree\Seat\TreeLib\Parser;
 
+use Illuminate\Support\Collection;
 use RecursiveTree\Seat\TreeLib\Helpers\DynamicProperties;
 
 class ParseResult implements \JsonSerializable
 {
     use DynamicProperties;
 
-    public $items;
+    public Collection $items;
 
-    /**
-     * @param $items Illuminate\Support\Collection
-     */
+
     public function __construct($items)
     {
         $this->items = $items;
