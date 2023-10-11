@@ -20,7 +20,16 @@ class EveItem implements JsonSerializable, ToEveItem
     }
 
     public static function fromTypeID($type_id, $data=[]){
-        $item = new EveItem(InvType::find($type_id));
+        $typeModel = InvType::find($type_id);
+        if(!$typeModel){
+            //TODO clean this up
+            $typeModel = new InvType();
+            $typeModel->typeID = $type_id;
+            $typeModel->typeName = "Unknown Item";
+            $typeModel->bypassReadOnly(true);
+            $typeModel->save();
+        }
+        $item = new EveItem($typeModel);
         $item->setProperties($data);
         return $item;
     }
