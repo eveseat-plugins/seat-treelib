@@ -26,10 +26,6 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations/');
         $this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'treelib');
 
-        $this->publishes([
-            __DIR__ . '/resources/js' => public_path('treelib/js')
-        ]);
-
         Artisan::command('treelib:giveaway:server {server}', function ($server) {
             TreeLibSettings::$GIVEAWAY_SERVER_URL->set($server);
         });
