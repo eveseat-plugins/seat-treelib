@@ -3,14 +3,15 @@
 namespace RecursiveTree\Seat\TreeLib\Parser;
 
 use Illuminate\Support\Collection;
+use JsonSerializable;
 use RecursiveTree\Seat\TreeLib\Helpers\DynamicProperties;
+use ReturnTypeWillChange;
 
-class ParseResult implements \JsonSerializable
+class ParseResult implements JsonSerializable
 {
     use DynamicProperties;
 
     public Collection $items;
-
 
     public function __construct($items)
     {
