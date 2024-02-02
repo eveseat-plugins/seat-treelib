@@ -6,9 +6,11 @@ use Seat\Eveapi\Models\Sde\InvType;
 
 class FitParser extends Parser
 {
-    protected static function parse(string $fit, string $EveItemClass)
+    protected static function parse(string $fit, string $EveItemClass): ?ParseResult
     {
         $items = [];
+        $unparsed = [];
+        $warning = false;
 
         //parse ship type
         $matches = [];
@@ -19,7 +21,7 @@ class FitParser extends Parser
         $inv_model = InvType::where('typeName', $matches[1])->first();
         $ship = new $EveItemClass($inv_model);
         $ship->amount = 1;
-        array_push($items,$ship);
+        $items[] = $ship;
 
         //parse ship name
         $matches = [];
@@ -41,18 +43,25 @@ class FitParser extends Parser
             $inv_model = InvType::where('typeName', $item_name)->first();
 
             if($inv_model==null){
+                $unparsed[] = [
+                    'name' => $item_name,
+                    'amount' => $amount>0 ? $amount:1
+                ];
+                $warning = true;
                 continue;
             }
 
             $item = new $EveItemClass($inv_model);
             $item->amount = $amount>0 ? $amount:1;
 
-            array_push($items,$item);
+            $items[] = $item;
         }
 
-        $result = new ParseResult(collect($items));
+        $result = new ParseResult(collect($items), collect($unparsed));
         $result->ship = $ship;
         $result->shipName = $name;
+        $result->warning = $warning;
+
         return $result;
     }
 }

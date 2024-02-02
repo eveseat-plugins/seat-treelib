@@ -5,7 +5,6 @@ namespace RecursiveTree\Seat\TreeLib\Parser;
 use Illuminate\Support\Collection;
 use JsonSerializable;
 use RecursiveTree\Seat\TreeLib\Helpers\DynamicProperties;
-use ReturnTypeWillChange;
 
 class ParseResult implements JsonSerializable
 {
@@ -13,9 +12,12 @@ class ParseResult implements JsonSerializable
 
     public Collection $items;
 
-    public function __construct($items)
+    public Collection $unparsed;
+
+    public function __construct($items, $unparsed)
     {
         $this->items = $items;
+        $this->unparsed = $unparsed;
     }
 
     public function __serialize(): array
@@ -23,10 +25,11 @@ class ParseResult implements JsonSerializable
         return $this->getProperties();
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
-        return array_merge($this->getProperties(),[
-            "items"=>$this->items,
+        return array_merge($this->getProperties(), [
+            "items" => $this->items,
+            "unparsed" => $this->unparsed
         ]);
     }
 }

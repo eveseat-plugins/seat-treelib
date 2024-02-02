@@ -6,16 +6,17 @@ use Seat\Eveapi\Models\Sde\InvType;
 
 class ItemListParser extends Parser
 {
-    protected static function parse(string $text, string $EveItemClass)
+    protected static function parse(string $text, string $EveItemClass): ?ParseResult
     {
         // include translation star
         $expr = "^(?<name>[^*]+)\*?$";
 
         $lines = self::matchLines($expr, $text);
         //check if there are any matches
-        if($lines->where("match","!=",null)->isEmpty()) return null;
+        if($lines->whereNotNull("match")->isEmpty()) return null;
 
         $items = [];
+        $unparsed = [];
 
         $warning = false;
 
@@ -29,18 +30,22 @@ class ItemListParser extends Parser
 
             if($inv_model==null){
                 $warning = true;
+                $unparsed[] = [
+                    'name' => $line->match->name,
+                    'amount' => 1
+                ];
                 continue;
             }
 
             $item = new $EveItemClass($inv_model);
             $item->amount = 1;
-            array_push($items,$item);
+            $items[] = $item;
         }
 
         //if there are no items, ignore
         if(count($items)<1) return null;
 
-        $result = new ParseResult(collect($items));
+        $result = new ParseResult(collect($items), collect($unparsed));
         $result->warning = $warning;
         return $result;
     }

@@ -49,10 +49,11 @@ class NewInventoryWindowParser extends Parser
         $lines = self::matchLines($expr, $text);
 
         //check if there are any matches
-        if ($lines->where("match", "!=", null)->isEmpty()) return null;
+        if ($lines->whereNotNull("match")->isEmpty()) return null;
 
         $warning = false;
         $items = [];
+        $unparsed = [];
 
         foreach ($lines as $line) {
 
@@ -85,6 +86,8 @@ class NewInventoryWindowParser extends Parser
             $volume = self::parseBigNumber($line->match->volume);
             if ($volume !== null) $volume = $volume / $amount;
 
+            $ingamePrice = self::parseBigNumber($line->match->price);
+
             //if we can't guess the type from the name
             if ($type_model === null) {
                 $type_model = self::determineItemType($line->match, $volume, $groupID);
@@ -93,20 +96,27 @@ class NewInventoryWindowParser extends Parser
             //if we still don't have the type, ignore it
             if ($type_model === null) {
                 $warning = true;
+                $unparsed[] = [
+                    'name' => $line->match->name,
+                    'amount' => $amount,
+                    'volume' => $volume,
+                    'is_named' => $is_named,
+                    'ingamePrice' => $ingamePrice
+                ];
                 continue;
             }
 
             $item = new $EveItemClass($type_model);
             $item->amount = $amount;
             $item->volume = $volume;
-            $item->ingamePrice = self::parseBigNumber($line->match->price);
+            $item->ingamePrice = $ingamePrice;
             $item->is_named = $is_named;
             $items[] = $item;
         }
 
         if (count($items) < 1) return null;
 
-        $result = new ParseResult(collect($items));
+        $result = new ParseResult(collect($items), collect($unparsed));
         $result->warning = $warning;
         return $result;
     }

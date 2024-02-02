@@ -17,9 +17,10 @@ abstract class Parser
         ManualBuyPrices::class,
         //also bytes on ingame multibuys, so handle it afterwards
         NewInventoryWindowParser::class,
-        ItemListParser::class,
         // Try to parse a mineral scan if nothing else matched
-        MineralScanParser::class
+        MineralScanParser::class,
+        // Latest parser is the most aggressive
+        ItemListParser::class,
     ];
 
     /**
@@ -55,7 +56,7 @@ abstract class Parser
             }
         }
 
-        $result = new ParseResult(collect());
+        $result = new ParseResult(collect(), collect());
         $result->warning = true;
         $result->_debug_parser = null;
         return $result;

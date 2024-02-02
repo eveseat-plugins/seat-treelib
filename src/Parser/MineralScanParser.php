@@ -10,7 +10,7 @@ use Seat\Eveapi\Models\Sde\InvType;
 class MineralScanParser extends Parser
 {
 
-    protected static function parse(string $text, string $EveItemClass)
+    protected static function parse(string $text, string $EveItemClass): ?ParseResult
     {
         $expr = implode("", [
             "^(?<name>[^\t*]+)\*?",           // Name
@@ -22,7 +22,7 @@ class MineralScanParser extends Parser
 
         $lines = self::matchLines($expr, $text);
 
-        if ($lines->where("match", "!=", null)->isEmpty()) return null;
+        if ($lines->whereNotNull("match")->isEmpty()) return null;
 
         $warning = false;
         $parsed = [];
@@ -69,7 +69,7 @@ class MineralScanParser extends Parser
 
         if (count($parsed) < 1 && count($unparsed) < 1) return null;
 
-        $result = new FullParseResult(collect($parsed), collect($unparsed));
+        $result = new ParseResult(collect($parsed), collect($unparsed));
         $result->warning = $warning;
         return $result;
     }
