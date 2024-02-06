@@ -47,6 +47,7 @@ class ManualBuyPrices extends Parser
             $item = new $EveItemClass($inv_model);
             $item->amount = $amount;
             $item->price = $price;
+            $item->manualPrice = $price;
             $items[] = $item;
         }
 
