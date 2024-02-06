@@ -39,6 +39,7 @@ class ManualBuyPrices extends Parser
             $item = new $EveItemClass($inv_model);
             $item->amount = self::parseBigNumber($line->match->amount) ?? 1;
             $item->price = self::parseBigNumber($line->match->price);
+            $item->manualPrice = $item->price;
             array_push($items,$item);
         }
 
