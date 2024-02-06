@@ -4,8 +4,9 @@ namespace RecursiveTree\Seat\TreeLib\Items;
 use JsonSerializable;
 use RecursiveTree\Seat\TreeLib\Helpers\DynamicProperties;
 use Seat\Eveapi\Models\Sde\InvType;
+use Seat\Services\Contracts\HasTypeID;
 
-class EveItem implements JsonSerializable, ToEveItem
+class EveItem implements JsonSerializable, ToEveItem, HasTypeID
 {
     use DynamicProperties;
 
@@ -45,5 +46,13 @@ class EveItem implements JsonSerializable, ToEveItem
     public function toEveItem(): EveItem
     {
         return $this;
+    }
+
+    /**
+     * @return int The eve type id of this object
+     */
+    public function getTypeID(): int
+    {
+        return $this->typeModel->typeID;
     }
 }

@@ -4,14 +4,14 @@ namespace RecursiveTree\Seat\TreeLib\Parser;
 
 class LineMatch
 {
-    public $line;
-    public $match;
+    public string $line;
+    public ?PREGMatch $match;
 
     /**
      * @param $line string
-     * @param $match PREGMatch
+     * @param $match ?PREGMatch
      */
-    public function __construct($line, $match)
+    public function __construct(string $line, ?PREGMatch $match)
     {
         $this->line = $line;
         $this->match = $match;

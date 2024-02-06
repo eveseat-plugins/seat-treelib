@@ -3,18 +3,24 @@
 namespace RecursiveTree\Seat\TreeLib\Parser;
 
 use Illuminate\Support\Collection;
+use JsonSerializable;
 use RecursiveTree\Seat\TreeLib\Helpers\DynamicProperties;
 
-class ParseResult implements \JsonSerializable
+class ParseResult implements JsonSerializable
 {
     use DynamicProperties;
 
     public Collection $items;
 
+    public Collection $unparsed;
 
-    public function __construct($items)
+    public function __construct($items, $unparsed=null)
     {
         $this->items = $items;
+        if($unparsed === null){
+            $unparsed = collect();
+        }
+        $this->unparsed = $unparsed;
     }
 
     public function __serialize(): array
@@ -22,10 +28,11 @@ class ParseResult implements \JsonSerializable
         return $this->getProperties();
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
-        return array_merge($this->getProperties(),[
-            "items"=>$this->items,
+        return array_merge($this->getProperties(), [
+            "items" => $this->items,
+            "unparsed" => $this->unparsed
         ]);
     }
 }

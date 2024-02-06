@@ -6,7 +6,7 @@ use Seat\Eveapi\Models\Sde\InvType;
 
 class MultibuyParser extends Parser
 {
-    protected static function parse(string $text, string $EveItemClass)
+    protected static function parse(string $text, string $EveItemClass): ?ParseResult
     {
         $expr = implode("", [
             "^(?<name>[^\t*]+)\*?",                             //item name, excluding translation star
@@ -17,9 +17,10 @@ class MultibuyParser extends Parser
 
         $lines = self::matchLines($expr, $text);
         //check if there are any matches
-        if($lines->where("match","!=",null)->isEmpty()) return null;
+        if($lines->whereNotNull("match")->isEmpty()) return null;
 
         $items = [];
+        $unparsed = [];
         $warning = false;
         $has_total = false;
 
@@ -35,16 +36,23 @@ class MultibuyParser extends Parser
             };
 
             $inv_model = InvType::where('typeName', $line->match->name)->first();
+            $amount =  self::parseBigNumber($line->match->amount) ?? 1;
+            $ingamePrice = self::parseBigNumber($line->match->unit_price);
 
             if($inv_model==null){
                 $warning = true;
+                $unparsed[] = new UnparsedLine($line->line,[
+                    'name' => $line->match->name,
+                    'amount' => $amount,
+                    'ingamePrice' => $ingamePrice
+                ]);
                 continue;
             }
 
             $item = new $EveItemClass($inv_model);
-            $item->amount = self::parseBigNumber($line->match->amount) ?? 1;
-            $item->ingamePrice = self::parseBigNumber($line->match->unit_price);
-            array_push($items,$item);
+            $item->amount = $amount;
+            $item->ingamePrice = $ingamePrice;
+            $items[] = $item;
         }
 
         //if there is no Total: at the end, it is not compatible with this format
@@ -53,7 +61,7 @@ class MultibuyParser extends Parser
         //if there are no items, ignore
         if(count($items)<1) return null;
 
-        $result = new ParseResult(collect($items));
+        $result = new ParseResult(collect($items), collect($unparsed));
         $result->warning = $warning;
         return $result;
     }
