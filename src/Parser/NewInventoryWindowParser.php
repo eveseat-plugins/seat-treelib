@@ -96,13 +96,13 @@ class NewInventoryWindowParser extends Parser
             //if we still don't have the type, ignore it
             if ($type_model === null) {
                 $warning = true;
-                $unparsed[] = [
+                $unparsed[] = new UnparsedLine($line->line,[
                     'name' => $line->match->name,
                     'amount' => $amount,
                     'volume' => $volume,
                     'is_named' => $is_named,
                     'ingamePrice' => $ingamePrice
-                ];
+                ]);
                 continue;
             }
 

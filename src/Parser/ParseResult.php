@@ -14,9 +14,12 @@ class ParseResult implements JsonSerializable
 
     public Collection $unparsed;
 
-    public function __construct($items, $unparsed)
+    public function __construct($items, $unparsed=null)
     {
         $this->items = $items;
+        if($unparsed === null){
+            $unparsed = collect();
+        }
         $this->unparsed = $unparsed;
     }
 

@@ -36,6 +36,7 @@ class FitParser extends Parser
         preg_match_all('/^(?<names>[[:alnum:]\' \-]+?)(?:, [[:alnum:]\' \-]+?)?(?: x(?<amounts>\d+))?$/mu', $fit, $matches);
         $names = $matches["names"];
         $amounts = $matches["amounts"];
+        $lines = $matches[0];
         for ($i=0;$i<count($names);$i++){
             $item_name = $names[$i];
             $amount = intval($amounts[$i]);
@@ -43,10 +44,13 @@ class FitParser extends Parser
             $inv_model = InvType::where('typeName', $item_name)->first();
 
             if($inv_model==null){
-                $unparsed[] = [
-                    'name' => $item_name,
-                    'amount' => $amount>0 ? $amount:1
-                ];
+                $unparsed[] = new UnparsedLine(
+                    $lines[$i],
+                    [
+                        'name' => $item_name,
+                        'amount' => $amount>0 ? $amount:1
+                    ]
+                );
                 $warning = true;
                 continue;
             }

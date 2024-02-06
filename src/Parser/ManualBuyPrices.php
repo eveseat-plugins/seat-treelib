@@ -36,11 +36,11 @@ class ManualBuyPrices extends Parser
 
             if($inv_model==null){
                 $warning = true;
-                $unparsed[] = [
+                $unparsed[] = new UnparsedLine($line->line,[
                     'name' => $line->match->name,
                     'amount' => $amount,
                     'price' => $price
-                ];
+                ]);
                 continue;
             }
 

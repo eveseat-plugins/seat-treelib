@@ -50,12 +50,12 @@ class MineralScanParser extends Parser
 
             if ($inv_model == null) {
                 $warning = true;
-                $unparsed[] = [
+                $unparsed[] = new UnparsedLine($line->line,[
                     'name' => $line->match->name,
                     'amount' => $amount,
                     'volume' => $volume,
                     'distance' => $distance
-                ];
+                ]);
                 continue;
             }
 
