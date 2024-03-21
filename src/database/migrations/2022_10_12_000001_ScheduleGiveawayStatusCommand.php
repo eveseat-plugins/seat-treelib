@@ -6,16 +6,20 @@ use Illuminate\Database\Migrations\Migration;
 use RecursiveTree\Seat\TreeLib\Helpers\ScheduleHelper;
 use Seat\Services\Models\Schedule;
 
-class ScheduleGiveawayStatusCommand extends Migration
+return new class extends Migration
 {
     public function up()
     {
-        ScheduleHelper::scheduleCommand("treelib:giveaway:server:status","52 * * * *");
+        \Seat\Services\Facades\DeferredMigration::schedule(function (){
+            ScheduleHelper::scheduleCommand("treelib:giveaway:server:status","52 * * * *");
+        });
     }
 
     public function down()
     {
-        ScheduleHelper::removeCommand("treelib:giveaway:server:status");
+        \Seat\Services\Facades\DeferredMigration::schedule(function (){
+            ScheduleHelper::removeCommand("treelib:giveaway:server:status");
+        });
     }
-}
+};
 

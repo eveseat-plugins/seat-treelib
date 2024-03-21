@@ -13,13 +13,6 @@ return [
                 'icon'  => 'fas fa-user',
                 'route' => 'seatcore::profile.view',
             ],
-            //treelib settings page
-            [
-                'name'  => 'treelib_settings',
-                'label' => 'treelib::treelib.treelib_settings',
-                'icon'  => 'fas fa-cogs',
-                'route' => 'treelib.settings',
-            ]
         ]
     ]
 ];
