@@ -4,6 +4,7 @@ namespace RecursiveTree\Seat\TreeLib;
 
 use Exception;
 use RecursiveTree\Seat\TreeLib\database\seeders\TreelibScheduleSeeder;
+use RecursiveTree\Seat\TreeLib\Items\EveItem;
 use RecursiveTree\Seat\TreeLib\Items\ToEveItem;
 use Seat\Services\AbstractSeatPlugin;
 
@@ -12,6 +13,9 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Collection;
+use Seat\Services\Contracts\HasTypeID;
+use Seat\Services\Contracts\HasTypeIDWithAmount;
+use Seat\Services\Items\EveTypeWithAmount;
 
 class TreeLibServiceProvider extends AbstractSeatPlugin
 {
@@ -47,15 +51,34 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
         Collection::macro('simplifyItems', function () {
             return $this
                 ->filter(function ($item){
-                    return $item->amount > 0;
+                    if($item instanceof HasTypeIDWithAmount){
+                        $amount = $item->getAmount();
+                    } else {
+                        $amount = $item->amount;
+                    }
+                    return $amount > 0;
                 })
-                ->groupBy("typeModel.typeID")
+                ->groupBy(function($item){
+                    if($item instanceof HasTypeID){
+                        return $item->getTypeID();
+                    } else {
+                        return $item->typeModel->typeID;
+                    }
+                })
                 ->map(function ($item_list) {
                     $first = $item_list->first();
-                    $first->amount = $item_list->sum(function ($item) {
-                        return $item->amount;
-                    });
-                    return $first;
+                    if($first instanceof EveItem) {
+                        // legacy case
+                        $first->amount = $item_list->sum(function ($item) {
+                            return $item->amount;
+                        });
+                        return $first;
+                    } else {
+                        // new case with modern eve items
+                        return new EveTypeWithAmount($first, $item_list->sum(function ($item){
+                            return $item->getAmount();
+                        }));
+                    }
                 });
         });
 
