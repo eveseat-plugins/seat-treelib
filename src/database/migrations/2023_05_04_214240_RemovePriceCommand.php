@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RemovePriceCommand extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class RemovePriceCommand extends Migration
      */
     public function up()
     {
-        \RecursiveTree\Seat\TreeLib\Helpers\ScheduleHelper::removeCommand("treelib:esi:prices:update");
+        // this migration is a stub so that migrating downwards still works. The actual logic is in the schedule seeder
     }
 
     /**
@@ -23,6 +23,6 @@ class RemovePriceCommand extends Migration
      */
     public function down()
     {
-        //I really don't need to support cross version upgrades
+        // this migration is a stub so that migrating downwards still works. The actual logic is in the schedule seeder
     }
-}
+};

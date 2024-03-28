@@ -3,6 +3,7 @@
 namespace RecursiveTree\Seat\TreeLib;
 
 use Exception;
+use RecursiveTree\Seat\TreeLib\database\seeders\TreelibScheduleSeeder;
 use RecursiveTree\Seat\TreeLib\Items\ToEveItem;
 use Seat\Services\AbstractSeatPlugin;
 
@@ -38,6 +39,7 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
     {
         $this->mergeConfigFrom(__DIR__ . '/Config/treelib.sidebar.php', 'package.sidebar');
         $this->registerPermissions(__DIR__ . '/Config/treelib.permissions.php', 'treelib');
+        $this->registerDatabaseSeeders(TreelibScheduleSeeder::class);
     }
 
     private function extendCollections()

@@ -10,16 +10,12 @@ return new class extends Migration
 {
     public function up()
     {
-        \Seat\Services\Facades\DeferredMigration::schedule(function (){
-            ScheduleHelper::scheduleCommand("treelib:giveaway:server:status","52 * * * *");
-        });
+        // this migration is a stub so that migrating downwards still works. The actual logic is in the schedule seeder
     }
 
     public function down()
     {
-        \Seat\Services\Facades\DeferredMigration::schedule(function (){
-            ScheduleHelper::removeCommand("treelib:giveaway:server:status");
-        });
+        // this migration is a stub so that migrating downwards still works. The actual logic is in the schedule seeder
     }
 };
 
