@@ -14,4 +14,5 @@ class FittingPluginHelper
     public static $FITTING_PLUGIN_FITTING_MODEL = "CryptaTech\Seat\Fitting\Models\Fitting";
     public static $FITTING_PLUGIN_DOCTRINE_MODEL = "CryptaTech\Seat\Fitting\Models\Doctrine";
     public const FITTING_PLUGIN_FITTING_UPDATED_EVENT = "CryptaTech\Seat\Fitting\Events\FittingUpdated";
+    public const FITTING_PLUGIN_DOCTRINE_UPDATED_EVENT = "CryptaTech\Seat\Fitting\Events\DoctrineUpdated";
 }
