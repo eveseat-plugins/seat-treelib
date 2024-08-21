@@ -16,6 +16,11 @@ Route::group([
         'uses' => 'LookupController@priceProviders',
     ]);
 
+    Route::get('/advertisment/creatorcode/disable', [
+        'as'   => 'treelib.disableCreatorCodeAdvertisment',
+        'uses' => 'UserController@disableAdvertisement',
+    ]);
+
     Route::match(['get', 'post'],'/debug/parsers',[
         'as'   => 'treelib.debugParsers',
         'uses' => 'ParserTestController@testParser',
