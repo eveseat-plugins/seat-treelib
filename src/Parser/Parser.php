@@ -65,10 +65,15 @@ abstract class Parser
     protected abstract static function parse(string $text, string $EveItemClass);
 
     /**
-     * Use 3 kind of separators for thousands : ' , and whitespace
-     * Added different kind of decimals separators as well : . and ,
+     * REGEXP for number
+     *
+     * Keep decimal separators in sync with DECIMAL_SEPARATORS
+     * Keep thousands separators in sync with THOUSANDS_SEPARATOR
      */
-    protected const BIG_NUMBER_REGEXP = "(?:\d+(?:[’\s+,]\d\d\d)*(?:[\.,]\d\d)?)";
+    public const BIG_NUMBER_REGEXP = "(?:\d+(?:[’‘\s .,]\d\d\d)*(?:[.,]\d\d)?)";
+
+    private const DECIMAL_SEPARATORS = ".,";
+    private const THOUSANDS_SEPARATOR = "’‘ .,";
 
     /**
      * @throws Exception
@@ -93,10 +98,34 @@ abstract class Parser
         });
     }
 
-    protected static function parseBigNumber($number): ?float
+    public static function parseBigNumber($number): ?float
     {
         if ($number === null) return null;
-        // 3 kind of thousands separators are found here too
-        return floatval(str_replace(["’", " ", ","], "", $number));
+
+        /*
+         * problem: depending on language, seat uses . as thousands and , as decimal separator, or exactly the other way around
+         * => we have to detect the format
+         * Luckily, if it is a decimal, it always seems to be rounded to two digits, while a thousands separator will have three digits
+         * If we thee three digits, treat it as a thousands. Otherwise, treat it as a decimal
+         */
+
+        $last = -1;
+        foreach (mb_str_split(self::DECIMAL_SEPARATORS) as $char){
+            $pos = strrpos($number, $char);
+            if($pos > $last) {
+                $last = $pos;
+            }
+        }
+        $thousands_part = $number;
+        $decimal_part = "0";
+        if($last > 0){
+            $last_segment_len = strlen($number) - $last - 1;
+            if($last_segment_len !== 3) {
+                $thousands_part = substr($number,0, $last);
+                $decimal_part = substr($number,$last+1);
+            }
+        }
+
+        return floatval(str_replace(mb_str_split(self::THOUSANDS_SEPARATOR), "", $thousands_part).".".$decimal_part);
     }
 }

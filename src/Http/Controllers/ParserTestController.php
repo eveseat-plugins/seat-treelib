@@ -21,6 +21,7 @@ class ParserTestController extends Controller
         if($request->text) {
             $result = Parser::parseItems($request->text);
             $result->_debug_text = $request->text;
+            $result->_debug_item_count = count($result->items);
             return response()->json($result)->setEncodingOptions(JSON_PRETTY_PRINT);
         }
 
