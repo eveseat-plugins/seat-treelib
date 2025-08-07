@@ -33,10 +33,10 @@ class NewInventoryWindowParser extends Parser
         $expr = implode("", [
             "^(?<name>[^\t*]+)\*?",                                            //name
             "\t(?<amount>" . self::BIG_NUMBER_REGEXP . "?)",             //amount
-            "(?:\t(?<group>\D[^\t]*))?",                                  //group
-            "(?:\t(?<category>\D[^\t]*))?",                               //category
-            "(?:\t(?<size>\D[^\t]*)?)?",                                   //size. seems to be empty
-            "(?:\t(?<slot>\D[^\t]*)?)?",                                   //slot
+            "(?:\t(?<group>[^\t\d]*))?",                                  //group
+            "(?:\t(?<category>[^\t\d]*))?",                               //category
+            "(?:\t(?<size>[^\t\d]*)?)?",                                   //size. seems to be empty
+            "(?:\t(?<slot>[^\t\d]*)?)?",                                   //slot
             "(?:\t(?<volume>" . self::BIG_NUMBER_REGEXP . ") m3)?",         //volume
             "(?:\t(?<meta>" . self::BIG_NUMBER_REGEXP . ")?)?",              //meta level
             "(?:\t(?<tech>" . self::BIG_NUMBER_REGEXP . "|None))?",         //tech level
@@ -47,6 +47,7 @@ class NewInventoryWindowParser extends Parser
         //dd($expr);
 
         $lines = self::matchLines($expr, $text);
+        //dd($lines);
 
         //check if there are any matches
         if ($lines->whereNotNull("match")->isEmpty()) return null;

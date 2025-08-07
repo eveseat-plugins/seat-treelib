@@ -52,9 +52,22 @@ class CCPNumberParserTest extends TestCase
         $this->assertFalse($result->items[0]->is_named);
     }
 
-//    public function testEnglishInventoryWindow()
-//    {
-//        $result = Parser::parseItems("Capital Construction Parts	5	Capital Construction Components	Commodity			10’000 m3	69’520’490.05 ISK");
-//        $this->assertCount(1, $result->items);
-//    }
+    public function testEnglishInventoryWindow()
+    {
+        $result = Parser::parseItems("Capital Construction Parts	5	Capital Construction Components	Commodity			10’000 m3	69’520’490.05 ISK");
+        $this->assertCount(1, $result->items);
+        $this->assertEquals(21037, $result->items[0]->getTypeID());
+        $this->assertEquals(5, $result->items[0]->amount);
+        $this->assertEquals(2000, $result->items[0]->volume);
+        $this->assertEquals(69520490.05, $result->items[0]->ingamePrice);
+        $this->assertFalse($result->items[0]->is_named);
+
+        $result = Parser::parseItems("Liquid Ozone	20’000	Ice Product	Material			8’000 m3		None	2’510’800.00 ISK");
+        $this->assertCount(1, $result->items);
+        $this->assertEquals(16273, $result->items[0]->getTypeID());
+        $this->assertEquals(20000, $result->items[0]->amount);
+        $this->assertEquals(0.4, $result->items[0]->volume);
+        $this->assertEquals(2510800, $result->items[0]->ingamePrice);
+        $this->assertFalse($result->items[0]->is_named);
+    }
 }

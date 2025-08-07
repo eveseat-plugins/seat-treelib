@@ -80,7 +80,7 @@ abstract class Parser
      */
     protected static function match($expr, $text): ?PREGMatch
     {
-        $result = preg_match("/$expr/", $text, $match);
+        $result = preg_match("/$expr/u", $text, $match);
         if ($result === false) {
             throw new Exception("regexp error");
         }
