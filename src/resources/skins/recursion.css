@@ -1,0 +1,58 @@
+/* variables */
+:root {
+    --background-color: #1f2023;
+    --background-light-color: #2b2d30;
+    --background-light-color-darker: color-mix(in srgb,var(--background-light-color) 50%,var(--background-color));
+    --background-light-color-lighter: color-mix(in srgb, var(--background-light-color) 96%,white);
+    --background-input-color: color-mix(in srgb, var(--background-light-color) 90%,white);
+
+    --text-on-background-color: #c2c7d0;
+
+}
+
+/* Text Color*/
+body {
+    color: var(--text-on-background-color);
+}
+.text-dark {
+    color: var(--text-on-background-color) !important;
+}
+.form-control, .form-control:focus {
+    color: inherit;
+}
+
+/* Background Colors */
+.content-wrapper {
+    background-color: var(--background-color);
+}
+.navbar-gray {
+    background-color: var(--background-light-color);
+}
+[class*=sidebar-dark-] {
+    background-color: var(--background-light-color);
+}
+.card {
+    background-color: var(--background-light-color);
+}
+.card-header {
+    background-color: var(--background-light-color-lighter);
+}
+.card-footer {
+    background-color: var(--background-light-color-darker);
+}
+.callout {
+    background-color: var(--background-light-color);
+}
+.list-group-item {
+    background-color: var(--background-light-color);
+}
+.form-control, .form-control:focus {
+    background-color: var(--background-input-color);
+}
+.select2-container--default .select2-selection--multiple,
+.select2-container--default .select2-selection--single {
+    background-color: inherit;
+}
+.page-item.disabled .page-link, .page-link {
+    background-color: var(--background-input-color);
+}

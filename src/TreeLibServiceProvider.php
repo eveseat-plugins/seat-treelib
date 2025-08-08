@@ -37,6 +37,7 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
         });
 
         $this->extendCollections();
+        $this->registerSkins();
     }
 
     public function register()
@@ -96,6 +97,12 @@ class TreeLibServiceProvider extends AbstractSeatPlugin
             }
             return $multibuy;
         });
+    }
+
+    private function registerSkins():void
+    {
+        $this->publishes([__DIR__ . '/resources/skins' => public_path('web/css/skins')],["public","seat"]);
+        $this->mergeConfigFrom(__DIR__ . '/Config/treelib.skins.php', 'web.skins');
     }
 
     public function getName(): string
